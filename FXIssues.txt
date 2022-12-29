@@ -65,7 +65,7 @@ and in both 'onIsOnEditChanged' and 'onEditedPlotIdChanged', I reset a property 
                 x.getPlotId() == selectedPlotIdProperty.get()
         );
 
-in the constructor. So when I set editedPlotIdProperty in those two methods, it should apply the filter goven in the editSpace FilteredList but it doesn't. Remove the
+in the constructor. So when I set editedPlotIdProperty in those two methods, it should apply the filter given in the editSpace FilteredList but it doesn't. Remove the
 	
 	System.out.println("editedPlotId " + editedPlotIdProperty.get());
 
