@@ -13,7 +13,7 @@ JavaFX 19
 Instead of experimenting on nothing in 'JavaFX-CustomWindow-Button-Transition' repo decided to rewrite my WPF RentManager in JavaFX and see how it is. Appplication isn't complete yet so there're some disfuctional issues. Add view is kind of ok and functional, Report view, except for Balance view, is also kind of ok, maybe will apply some polish later. TextWrapping in TreeViews messes up reports. Transaction view is also kind of ok, TreeView in BulkRent (Rent for Month) view has some issue.
 ===========================================================
 
-1) each module has a ridiculous folder/package, I wanted to keep those files (in ridiculous package) in the root directory and reference those in other files in the same or other module BUT you can't do that!
+1) each module has a ridiculous folder/package, I wanted to keep those files (in ridiculous package) in the root directory and reference those in other files in the same or other module. You can't do that!
 
 2) In RentManager/ridiculous/Appdata you'll see 7 ObservableList:
 
