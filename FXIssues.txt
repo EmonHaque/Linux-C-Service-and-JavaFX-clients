@@ -48,7 +48,7 @@ These kind of filter with extractor in JavaFX invokes ListChangeListener.Change 
 	private void onIsOnEditChanged(ObservableValue<?> o, boolean ov, boolean nv)
 	private void onEditedPlotIdChanged(ObservableValue<?> o, Number ov, Number nv)
 
-methods.in 'cloneSelected' I've:
+methods.In 'cloneSelected' I've:
 
 	edited.plotIdProperty().removeListener(this::onEditedPlotIdChanged);
 	...
