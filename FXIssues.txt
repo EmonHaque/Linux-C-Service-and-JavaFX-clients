@@ -1,0 +1,82 @@
+Distro: Void Linux x64/glibc 
+Kernel: 6.0.15_1
+DE: X11/GNOME 42.6
+Resolution: 3840 x 2160
+Scaling: 200%
+Refresh rate: 29.97 Hz
+CPU: Intel Core i3 10100F x 8
+GPU: NVIDIA GeForce GT 730 (kepler)
+IDE: IntelliJ IDEA 2022.3.1 (Community Edition)
+openjdk 19.0.1 2022-10-18
+JavaFX 19
+===========================================================
+Instead of experimenting on nothing in 'JavaFX-CustomWindow-Button-Transition' repo decided to rewrite my WPF RentManager in JavaFX and see how it is. Appplication isn't complete yet so there're some disfuctional issues. Add view is kind of ok and functional, Report view, except for Balance view, is also kind of ok, maybe will apply some polish later. TextWrapping in TreeViews messes up reports. Transaction view is also kind of ok, TreeView in BulkRent (Rent for Month) view has some issue.
+===========================================================
+
+1) each module has a ridiculous folder/package, I wanted to keep those files (in ridiculous package) in the root directory and reference those in other files in the same or other module BUT you can't do that!
+
+2) In RentManager/ridiculous/Appdata you'll see 7 ObservableList:
+
+    public static ObservableList<Plot> plots;
+    public static ObservableList<Space> spaces;
+    public static ObservableList<Tenant> tenants;
+    public static ObservableList<Lease> leases;
+    public static ObservableList<ControlHead> controlHeads;
+    public static ObservableList<Head> heads;
+    public static ObservableList<Notification> notifications;
+    
+and these are filled in InitialLoadTask of AppData. These are the base lists one is supposed to manipulate (edit, update) and the updates should be seen all over the application. In Rentmanager/ViewModels you see useage these lists. Problem is you don't see update when you manipulate these lists unless you wrap these in another FXCollections.synchronizedObservableList and you can't give synchronizedObservableList a extractor. Tried FXCollections.ObservableList and that also doesn't work. So you can't work with one underlying collection like you do in WPF.
+
+If you go to RentManager/ViewModels/Edit/EditLeaseVM you'll see a Jar thing:
+
+	var source = new Jar<>(AppData.leases, o -> new Observable[]{
+		o.isExpiredProperty(),
+		stateProperty,
+		queryProperty,
+		selectedPlotIdProperty
+	});
+
+in the constructor. o.isExpiredProperty() is a property of the items contained in the list and the rest are properties of viewmodel. Different viewmodels may have different extractor on the same underlying list and you can't construct such thing afterwards with any of FXCollections...List hence the inefficient Jar which listens to the underlying list's wasAdded/wasRemoved change and adds and/or remove.
+
+3) in RentManager/ViewModels/Edit/EditLeaseVM you see 'public FilteredList<Space> editSpace' and it relies on another Jar thing's extractor for filter. When you launch the application and go to Edit -> Lease, you see on the left side Asia in SelectionBox and Afghanistan, Indonesia and Iraq in a list below. When you select Afghanistan, you see right side is populated with some information. At the bottom right you'll see a pencil/edit button and if you click that, you see Asia, Afghanistan in SelectionBoxes on the right side. When you select, for example, Europe on the Plot SelectionBox on the right, you see Afghanistan in the following SelectionBox becomes England with another problem.
+
+These kind of filter with extractor in JavaFX invokes ListChangeListener.Change for every single item removed and/or added and since my SelectionBox relies on these changes, it's highly inefficient. For these kind of Filter, I used to get a single Reset event in WPF and do whatever I want to do. In javaFX, the thing I do on change is done, many times, for every single item added/removed.
+
+4) in RentManager/ViewModels/Edit/EditLeaseVM you see these 3:
+
+	public void cloneSelected()
+	private void onIsOnEditChanged(ObservableValue<?> o, boolean ov, boolean nv)
+	private void onEditedPlotIdChanged(ObservableValue<?> o, Number ov, Number nv)
+
+methods.in 'cloneSelected' I've:
+
+	edited.plotIdProperty().removeListener(this::onEditedPlotIdChanged);
+	...
+	edited.plotIdProperty().addListener(this::onEditedPlotIdChanged);
+
+and in both 'onIsOnEditChanged' and 'onEditedPlotIdChanged', I reset a property 'editedPlotIdProperty.set(...)' and that editedPlotIdProperty is an observable in a Jar:
+
+        var editSpaceSource = new Jar<>(AppData.spaces, o -> new Observable[]{
+                selectedPlotIdProperty,
+                editedPlotIdProperty
+        });
+        editSpace = new FilteredList<>(editSpaceSource, x -> isOnEditProperty.get() ?
+                x.getPlotId() == editedPlotIdProperty.get() :
+                x.getPlotId() == selectedPlotIdProperty.get()
+        );
+
+in the constructor. So when I set editedPlotIdProperty in those two methods, it should apply the filter goven in the editSpace FilteredList but it doesn't. Remove the
+	
+	System.out.println("editedPlotId " + editedPlotIdProperty.get());
+
+from both 'onIsOnEditChanged' and 'onEditedPlotIdChanged' methods, Launch the App, Select Afghanistan in Edit -> Lease view, click on edit button, change Asia to Africa in Plot SelectionBox on the Right, you see Egypt in place of Afghanistan. Click the cancel button on bottom right, where edit was and you see it becomes Afghanistan again. Click once again the edit button, change Asia to Europe/Africa and you see Afghanistan doesn't change anymore. So the important thing is:
+
+	System.out.println("editedPlotId " + editedPlotIdProperty.get());
+
+or the get call. When you call get before set it works as expected. Haven't been able to figure out why do I need that get call before set!
+
+5) in RentManager/Views/Transaction/Bulkrent, there's a TreeView. When you launch the application and go to Transaction view, you see that on the left side. Problem is you can select Level 1 Treeitems of the TreeView. If you disable Level 1 by calling setDisable in the updateItem method of TreeCell, it works BUT you can't expand/collapse nodes anymore.
+
+
+
+
