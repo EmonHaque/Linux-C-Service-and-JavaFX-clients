@@ -1,4 +1,4 @@
-Experimental, not sure how far will I go with javaFX!
+Experimental, on Void Linux, not sure how far will I go with javaFX!
 
 1) Place data.db somewhere and replace the location in this
 
