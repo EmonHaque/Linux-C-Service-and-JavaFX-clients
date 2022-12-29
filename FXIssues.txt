@@ -25,7 +25,7 @@ Instead of experimenting on nothing in 'JavaFX-CustomWindow-Button-Transition' r
     public static ObservableList<Head> heads;
     public static ObservableList<Notification> notifications;
     
-and these are filled in InitialLoadTask of AppData. These are the base lists one is supposed to manipulate (edit, update) and the updates should be seen all over the application. In Rentmanager/ViewModels you see useage of these lists. Problem is you don't see update when you manipulate these lists unless you wrap these in another FXCollections.synchronizedObservableList and you can't give synchronizedObservableList a extractor. Tried FXCollections.ObservableList and that also doesn't work. So you can't work with one underlying collection like you do in WPF.
+and these are filled in InitialLoadTask of AppData. These are the base lists one is supposed to manipulate (edit, update) and the updates should be seen all over the application. In Rentmanager/ViewModels you see useage of these lists. Problem is you don't see update when you manipulate these lists unless you wrap these in another FXCollections.synchronizedObservableList and you can't give synchronizedObservableList an extractor. Tried FXCollections.ObservableList and that also doesn't work. So you can't work with one underlying collection like you do in WPF.
 
 If you go to RentManager/ViewModels/Edit/EditLeaseVM you'll see a Jar thing:
 
