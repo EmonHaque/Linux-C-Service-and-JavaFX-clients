@@ -36,7 +36,7 @@ If you go to RentManager/ViewModels/Edit/EditLeaseVM you'll see a Jar thing:
 		selectedPlotIdProperty
 	});
 
-in the constructor. o.isExpiredProperty() is a property of the items contained in the list and the rest are properties of viewmodel. Different viewmodels may have different extractor on the same underlying list and you can't construct such thing afterwards with any of FXCollections...List hence the inefficient Jar which listens to the underlying list's wasAdded/wasRemoved change and adds and/or remove.
+in the constructor. o.isExpiredProperty() is a property of the items contained in the list and the rest are properties of viewmodel. Different viewmodels may have different extractor on the same underlying list and you can't construct such thing afterwards with any of FXCollections...List hence the inefficient Jar which listens to the underlying list's wasAdded/wasRemoved change and adds and/or removes.
 
 3) in RentManager/ViewModels/Edit/EditLeaseVM you see 'public FilteredList<Space> editSpace' and it relies on another Jar thing's extractor for filter. When you launch the application and go to Edit -> Lease, you see on the left side Asia in SelectionBox and Afghanistan, Indonesia and Iraq in a list below. When you select Afghanistan, you see right side is populated with some information. At the bottom right you'll see a pencil/edit button and if you click that, you see Asia, Afghanistan in SelectionBoxes on the right side. When you select, for example, Europe on the Plot SelectionBox on the right, you see Afghanistan in the following SelectionBox becomes England with another problem.
 
