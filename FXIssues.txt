@@ -63,14 +63,40 @@ and in both 'onIsOnEditChanged' and 'onEditedPlotIdChanged', I reset a property 
                 x.getPlotId() == selectedPlotIdProperty.get()
         );
 
-in the constructor. So when I set editedPlotIdProperty in those two methods, it should apply the filter given in the editSpace FilteredList but it doesn't. Remove the
+in the constructor. So when I set editedPlotIdProperty in onEditedPlotIdChanged method, it should apply the filter given in the editSpace FilteredList but it doesn't. Remove the
 	
 	System.out.println("EditLeaseVM: editedPlotId " + editedPlotIdProperty.get());
 
 from 'onEditedPlotIdChanged' method, Launch the App, Select Afghanistan in Edit -> Lease view, click on edit button, change Asia to Africa in Plot SelectionBox on the Right, you see Egypt in place of Afghanistan. Click the cancel button on bottom right, where edit was and you see it becomes Afghanistan again. Click once again the edit button, change Asia to Europe/Africa and you see Afghanistan doesn't change anymore. So the important thing is:
 
-	System.out.println("editedPlotId " + editedPlotIdProperty.get());
+	System.out.println("EditLeaseVM: editedPlotId " + editedPlotIdProperty.get());
 
 or the get call. When you call get before set it works as expected. Haven't been able to figure out why do I need that get call before set!
 
 5) in RentManager/Views/Transaction/Bulkrent, there's a TreeView. When you launch the application and go to Transaction view, you see that on the left side. Problem is you can select Level 1 Treeitems of the TreeView. If you disable Level 1 by calling setDisable in the updateItem method of TreeCell, it works BUT you can't expand/collapse nodes anymore.
+
+6) On bottom left of HomeView (Rent, Deposit & Dues), click the Asia Slice, you see two charts on top right are drawn. When you hover over chart elements on Charge & Collections view, you see popup appears. Keep moving the mouse see popup starts flickering. In addition to thate flickering issue, Due & Tenants view has one more problem. It can't even show the popup when you hover over the righmost char element. That, probably, because the width of the popup plus the x position of popup exceeds the screen bounds! WPF automatically relocate popup if there's not enough space on any side.
+
+Charge & Collections view uses PinStack (Controls/controls/pinchart/PinStack.java) and Due & Tenants view uses PinColumn (Controls/controls/pinchart/PinColumn.java). In both of those you see 'private void onMouseEntered(MouseEvent e)' method which sets the x position of popup and calls show. If you click the "Existing" checkbox (BiState) in Due & Tenants view, you see another chart is drawn there and it's same popup issue and it uses (Controls/controls/columnstackchart/DoubleBar.java)
+
+7) On bottom right of HomeView, you see "Due & Payments" and there's a CheckBox (BiState) to filter exisiting or left tenants. When you click that, filter is applied and 'onTenantChanged' method of TenantDetailVM is called multiple times and as a result it jams the Server with multiple requests. When you apply fiter to a list, you don't call add/remove on the list, you just reset the list.
+
+8) In Controls module, you see two packages, skins and skinned. Things in those are necessary mostly because of your useless and worthless css. For every control, you either need to write some css for that control or subclass and do some worthless things I've done in those packages.
+
+In WPF you don't do these worthless things! For changing background and foreground you just write one thing! Here's an example:
+
+        Control.StyleProperty.OverrideMetadata(typeof(Control), new FrameworkPropertyMetadata() {
+            DefaultValue = new Style() {
+                Setters = {
+                    new Setter(Control.BackgroundProperty, Constants.Background),
+                    new Setter(Control.ForegroundProperty, Brushes.LightGray)
+                }
+            }
+        });
+
+every subclass of Control will take this style. Same for Scrollbars, just one thing like that and everywhere scrollbars takes the style.
+
+
+CREDITS
+---------------------------
+1) Your Bindings are great with your Simps (short for Simple...Property). In WPF you've to deal with a lot of string bindings and converters.
