@@ -52,7 +52,7 @@ methods.In 'cloneSelected' I've:
 
 	edited.plotIdProperty().addListener(this::onEditedPlotIdChanged);
 
-and in both 'onIsOnEditChanged' and 'onEditedPlotIdChanged', I reset a property 'editedPlotIdProperty.set(...)' and that editedPlotIdProperty is an observable in a Jar:
+and in 'onEditedPlotIdChanged', I reset a property 'editedPlotIdProperty.set(...)' and that editedPlotIdProperty is an observable in a Jar:
 
         var editSpaceSource = new Jar<>(AppData.spaces, o -> new Observable[]{
                 selectedPlotIdProperty,
@@ -75,7 +75,7 @@ or the get call. When you call get before set it works as expected. Haven't been
 
 5) in RentManager/Views/Transaction/Bulkrent, there's a TreeView. When you launch the application and go to Transaction view, you see that on the left side. Problem is you can select Level 1 Treeitems of the TreeView. If you disable Level 1 by calling setDisable in the updateItem method of TreeCell, it works BUT you can't expand/collapse nodes anymore.
 
-6) On bottom left of HomeView (Rent, Deposit & Dues), click the Asia Slice, you see two charts on top right are drawn. When you hover over chart elements on Charge & Collections view, you see popup appears. Keep moving the mouse see popup starts flickering. In addition to thate flickering issue, Due & Tenants view has one more problem. It can't even show the popup when you hover over the righmost char element. That, probably, because the width of the popup plus the x position of popup exceeds the screen bounds! WPF automatically relocate popup if there's not enough space on any side.
+6) On bottom left of HomeView (Rent, Deposit & Dues), click the Asia Slice, you see two charts on top right are drawn. When you hover over chart elements on Charge & Collections view, you see popup appears. Keep moving the mouse see popup starts flickering. In addition to that flickering issue, Due & Tenants view has one more problem. It can't even show the popup when you hover over the righmost chart element. That's, probably, because the width of the popup plus the x position of popup exceeds the screen bounds! WPF automatically relocate popup if there's not enough space on any side.
 
 Charge & Collections view uses PinStack (Controls/controls/pinchart/PinStack.java) and Due & Tenants view uses PinColumn (Controls/controls/pinchart/PinColumn.java). In both of those you see 'private void onMouseEntered(MouseEvent e)' method which sets the x position of popup and calls show. If you click the "Existing" checkbox (BiState) in Due & Tenants view, you see another chart is drawn there and it's same popup issue and it uses (Controls/controls/columnstackchart/DoubleBar.java)
 
