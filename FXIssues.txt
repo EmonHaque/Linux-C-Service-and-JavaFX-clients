@@ -1,6 +1,6 @@
 Distro: Void Linux x64/glibc 
 Kernel: 6.0.15_1
-DE: X11/GNOME 42.6
+DE: X11/GNOME 43.2
 Resolution: 3840 x 2160
 Scaling: 200%
 Refresh rate: 29.97 Hz
@@ -10,7 +10,11 @@ IDE: IntelliJ IDEA 2022.3.1 (Community Edition)
 openjdk 19.0.1 2022-10-18
 JavaFX 19
 ===========================================================
-Instead of experimenting on nothing in 'JavaFX-CustomWindow-Button-Transition' repo decided to rewrite my WPF RentManager in JavaFX and see how it is. Appplication isn't complete yet so there're some disfuctional issues. Add view is kind of ok and functional, Report view, except for Balance view, is also kind of ok, maybe will apply some polish later. TextWrapping in TreeViews messes up reports. Transaction view is also kind of ok, TreeView in BulkRent (Rent for Month) view has some issue.
+Instead of experimenting on nothing in 'JavaFX-CustomWindow-Button-Transition' repo decided to rewrite my WPF RentManager in JavaFX and see how it is. Appplication isn't complete yet so there're some disfuctional issues. 
+	Add view is kind of ok and functional, 
+	Report view is also kind of ok, maybe will apply some polish later. TextWrapping in TreeViews messes up reports. 	
+	Transaction view is also kind of ok, TreeView in BulkRent (Rent for Month) view has some issue.
+	HomeView is alo kind of ok.
 ===========================================================
 
 1) each module has a ridiculous folder/package, I wanted to keep those files (in ridiculous package) in the root directory and reference those in other files in the same or other module. You can't do that!
@@ -75,7 +79,7 @@ or the get call. When you call get before set it works as expected. Haven't been
 
 5) in RentManager/Views/Transaction/Bulkrent, there's a TreeView. When you launch the application and go to Transaction view, you see that on the left side. Problem is you can select Level 1 Treeitems of the TreeView. If you disable Level 1 by calling setDisable in the updateItem method of TreeCell, it works BUT you can't expand/collapse nodes anymore.
 
-6) On bottom left of HomeView (Rent, Deposit & Dues), click the Asia Slice, you see two charts on top right are drawn. When you hover over chart elements on Charge & Collections view, you see popup appears. Keep moving the mouse see popup starts flickering. In addition to that flickering issue, Due & Tenants view has one more problem. It can't even show the popup when you hover over the righmost chart element. That's, probably, because the width of the popup plus the x position of popup exceeds the screen bounds! WPF automatically relocate popup if there's not enough space on any side.
+6) On bottom left of HomeView (Rent, Deposit & Dues), click the Asia Slice, you see two charts on top right are drawn. When you hover over chart elements on Charge & Collections view, you see popup appears. Keep moving the mouse see popup starts flickering. In addition to that flickering issue, Due & Tenants view has one more problem. It can't even show the popup when you hover over the righmost chart element. That's because I've hide call on popup when mouse exits the chart element and when mouse is over popup chart element receives mouse exited event! I've similar draggable popup in WPF on those views and I've no issue there.
 
 Charge & Collections view uses PinStack (Controls/controls/pinchart/PinStack.java) and Due & Tenants view uses PinColumn (Controls/controls/pinchart/PinColumn.java). In both of those you see 'private void onMouseEntered(MouseEvent e)' method which sets the x position of popup and calls show. If you click the "Existing" checkbox (BiState) in Due & Tenants view, you see another chart is drawn there and it's same popup issue and it uses (Controls/controls/columnstackchart/DoubleBar.java)
 
@@ -95,6 +99,16 @@ In WPF you don't do these worthless things! For changing background and foregrou
         });
 
 every subclass of Control will take this style. Same for Scrollbars, just one thing like that and everywhere scrollbars takes the style.
+
+9) In Detail Rent, Depost & Dues of HomeView, sometimes you don't see left part of white stroke when the revealing animation is in action. Looks like it starts drawing from the middle.
+
+10) There's no PrintDialog like WPF/Windows where it lists all the printers including PDF. In Report -> Plot/Space/Tenant ledger, there's a print button on top right in the second row. If you've multiple printers or one printer and virtual pdf printer, you'll see a weird Printer selection dialog appears when you click that. That's in Controls/dialogs/PrinterSelectionDialog. 
+
+By default when document is printed fonts are too large compared to WPF/Windows. I've set the font size to 9 in the PrintTask of Rentmanager/ViewModels/BaseLedgerVM.
+
+One more issue is Number formatting. In WPF, I provide three semicolon separated format for positive, negative and zeros. Your DecimalFormat can handle up to two arguments, ie., positive and negative only! Nothing for zeros.
+
+11) In Reports -> Space, you see a SelectionBox on top left. Multiple Plots can have same space name so I've grouped ListBox in WPF. Here in JavaFX I can't group items in ListView.
 
 
 CREDITS
