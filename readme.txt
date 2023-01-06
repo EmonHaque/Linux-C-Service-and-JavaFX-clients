@@ -17,3 +17,6 @@ line of void InitializeDatabase() function of Database.c file of LoginService. C
 5) reference JavaFX library and in vm args give it --add-modules javafx.controls
 6) run (I'm on IntelliJ IDEA)
 7) to turn off LoginWindow, in public void start(Stage stage) of Controls/ClientApp, set var debug = true;
+==============================================
+
+WPF version of RentManager in Windows 10 uses 2-5% CPU and 50-60% GPU. In Linux, this JavaFX version uses 100% of one or more CPU cores and 100 % of GPU when animations are in action. Just keep moving mouse over any refresh button and look at the CPU/GPU usage in Linux.
