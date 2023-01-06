@@ -15,7 +15,7 @@ Instead of experimenting on nothing in 'JavaFX-CustomWindow-Button-Transition' r
 	Report view is also kind of ok, maybe will apply some polish later. TextWrapping in TreeViews messes up reports. 	
 	Transaction view is also kind of ok, TreeView in BulkRent (Rent for Month) view has some issue.
 	HomeView is alo kind of ok.
-	NotificationView notifies only on plot add and plot edit, you can add more in AppData.java by looking at the WPF/C# version of Rentmanager
+	NotificationView notifies only on plot add and plot edit by others (other instance of the Application will also work, userId has to be different), you can add more in AppData.java by looking at the WPF/C# version of Rentmanager
 ===========================================================
 
 1) each module has a ridiculous folder/package, I wanted to keep those files (in ridiculous package) in the root directory and reference those in other files in the same or other module. You can't do that!
