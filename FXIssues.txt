@@ -1,5 +1,5 @@
 Distro: Void Linux x64/glibc 
-Kernel: 6.0.15_1
+Kernel: 6.1.3_1
 DE: X11/GNOME 43.2
 Resolution: 3840 x 2160
 Scaling: 200%
@@ -15,6 +15,7 @@ Instead of experimenting on nothing in 'JavaFX-CustomWindow-Button-Transition' r
 	Report view is also kind of ok, maybe will apply some polish later. TextWrapping in TreeViews messes up reports. 	
 	Transaction view is also kind of ok, TreeView in BulkRent (Rent for Month) view has some issue.
 	HomeView is alo kind of ok.
+	NotificationView notifies only on plot add and plot edit, you can add more in AppData.java by looking at the WPF/C# version of Rentmanager
 ===========================================================
 
 1) each module has a ridiculous folder/package, I wanted to keep those files (in ridiculous package) in the root directory and reference those in other files in the same or other module. You can't do that!
@@ -109,6 +110,10 @@ By default when document is printed fonts are too large compared to WPF/Windows.
 One more issue is Number formatting. In WPF, I provide three semicolon separated format for positive, negative and zeros. Your DecimalFormat can handle up to two arguments, ie., positive and negative only! Nothing for zeros.
 
 11) In Reports -> Space, you see a SelectionBox on top left. Multiple Plots can have same space name so I've grouped ListBox in WPF. Here in JavaFX I can't group items in ListView.
+
+12) In AddView, SVGs are all over but few of them looks ok. Compare these with that of WPF to see how beautifully WPF draws those same icons in AddView.
+
+13) On top right 2 views of HomeView, there're tooltips and in that a ListView. Even if there's a few items, it shows big empty list. In SelectionBox I've used Controls/skinned/ExtendedResizableListView. It also fails to resize sometimes. These List/TreeViews should be resized automatically in Popup.
 
 
 CREDITS
