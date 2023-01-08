@@ -20,3 +20,10 @@ line of void InitializeDatabase() function of Database.c file of LoginService. C
 ==============================================
 
 WPF version of RentManager in Windows 10 uses 2-5% CPU and 50-60% GPU. In Linux, this JavaFX version uses 100% of one or more CPU cores and 100 % of GPU when animations are in action. Just keep moving mouse over any refresh button and look at the CPU/GPU usage in Linux.
+
+
+reminder:
+
+Windows C query of getTenantDetail should be updated
+Windows C query of getDepositDueRent should be updated
+Windows C editSpace should be updated
