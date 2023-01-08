@@ -123,7 +123,7 @@ I've been doing these coding experiments since .net core 1 and all that I've wri
 
 15) Sometimes you see some movement in Cells in ListView/TreeView when mouse enters for the first time.
 
-16) ByteOrder is another problem, I've to write ByteOrder.LITTLE_ENDIAN all over! Before stepping into Linux, I though Microssoft is the weird guy, flipped everything. My WPF/C# clients works fine with Windows C as well as Linux C without any change so it's Java the weird guy flipped everything for no reason. Is Java socket slower than C# socket? Your socekt socket doesn't provide all the functionalities that C# provides. For example, I cn't write a packet sniffer with Java socket. With C# socket I can and I've written a basic one I stare at sometimes.
+16) ByteOrder is another problem, I've to write ByteOrder.LITTLE_ENDIAN all over! Before stepping into Linux, I thought Microssoft is the weird guy, flipped everything. My WPF/C# clients works fine with Windows C as well as Linux C without any change so it's Java the weird guy flipped everything for no reason. Is Java socket slower than C# socket? Your socekt socket doesn't provide all the functionalities that C# provides. For example, I cn't write a packet sniffer with Java socket. With C# socket I can and I've written a basic one I stare at sometimes.
 
 
 CREDITS
