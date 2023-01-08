@@ -82,7 +82,9 @@ or the get call. When you call get before set it works as expected. Haven't been
 
 6) On bottom left of HomeView (Rent, Deposit & Dues), click the Asia Slice, you see two charts on top right are drawn. When you hover over chart elements on Charge & Collections view, you see popup appears. Keep moving the mouse see popup starts flickering. In addition to that flickering issue, Due & Tenants view has one more problem. It can't even show the popup when you hover over the righmost chart element. That's because I've hide call on popup when mouse exits the chart element and when mouse is over popup chart element receives mouse exited event! I've similar draggable popup in WPF on those views and I've no issue there.
 
-Charge & Collections view uses PinStack (Controls/controls/pinchart/PinStack.java) and Due & Tenants view uses PinColumn (Controls/controls/pinchart/PinColumn.java). In both of those you see 'private void onMouseEntered(MouseEvent e)' method which sets the x position of popup and calls show. If you click the "Existing" checkbox (BiState) in Due & Tenants view, you see another chart is drawn there and it's same popup issue and it uses (Controls/controls/columnstackchart/DoubleBar.java)
+Charge & Collections view uses PinStack (Controls/controls/pinchart/PinStack.java) and Due & Tenants view uses PinColumn (Controls/controls/pinchart/PinColumn.java). In both of those you see 'private void onMouseEntered(MouseEvent e)' method which sets the x position of popup and calls show. If you click the "Existing" checkbox (BiState) in Due & Tenants view, you see another chart is drawn there and it's same popup issue and it uses (Controls/controls/columnstackchart/DoubleBar.java).
+
+Changed x,y to avoid some issue BUT it's unavoidavle when there's not enough room to display the popup and it's to appear below the mouse. Capture the mouse and kill it. How do you capture?
 
 7) On bottom right of HomeView, you see "Due & Payments" and there's a CheckBox (BiState) to filter exisiting or left tenants. When you click that, filter is applied and 'onTenantChanged' method of TenantDetailVM is called multiple times and as a result it jams the Server with multiple requests. When you apply fiter to a list, you don't call add/remove on the list, you just reset the list.
 
@@ -114,6 +116,14 @@ One more issue is Number formatting. In WPF, I provide three semicolon separated
 12) In AddView, SVGs are all over but few of them looks ok. Compare these with that of WPF to see how beautifully WPF draws those same icons in AddView.
 
 13) On top right 2 views of HomeView, there're tooltips and in that a ListView. Even if there's a few items, it shows big empty list. In SelectionBox I've used Controls/skinned/ExtendedResizableListView. It also fails to resize sometimes. These List/TreeViews should be resized automatically in Popup.
+
+14) You can't provide custom Paper to Printer. In Reports -> Balances, Reports -> RP & LJ, and Reports -> Plot/Space/Tenant views there're options for printing. 'public void setPaper(Paper paper)' of Services/ridiculous/Press sets the Paper selected in Controls/dialogs/PrinterSelectionDialog. Wanted to give it a Custom Paper (8.5" x 11.7") with 0.5" Margin but you can't instantiate Paper! Looks like once upon a time people could provide custom paper but you broke that by making that API private.
+
+I've been doing these coding experiments since .net core 1 and all that I've written so far compiles and runs in .net 7. There's not that much breaking change in .net. I'd to put an if guard in my line chart loaded animation probably in .net 3/4/5 and that's the only breaking change so far.
+
+15) Sometimes you see some movement in Cells in ListView/TreeView when mouse enters for the first time.
+
+16) ByteOrder is another problem, I've to write ByteOrder.LITTLE_ENDIAN all over! Before stepping into Linux, I though Microssoft is the weird guy, flipped everything. My WPF/C# clients works fine with Windows C as well as Linux C without any change so it's Java the weird guy flipped everything for no reason. Is Java socket slower than C# socket? Your socekt socket doesn't provide all the functionalities that C# provides. For example, I cn't write a packet sniffer with Java socket. With C# socket I can and I've written a basic one I stare at sometimes.
 
 
 CREDITS
