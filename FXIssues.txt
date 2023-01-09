@@ -125,7 +125,7 @@ I've been doing these coding experiments since .net core 1 and all that I've wri
 
 16) ByteOrder is another problem, I've to write ByteOrder.LITTLE_ENDIAN all over! Before stepping into Linux, I thought Microssoft is the weird guy, flipped everything. My WPF/C# clients works fine with Windows C as well as Linux C without any change so it's Java the weird guy flipped everything for no reason. Is Java socket slower than C# socket? Your socekt socket doesn't provide all the functionalities that C# provides. For example, I cn't write a packet sniffer with Java socket. With C# socket I can and I've written a basic one I stare at sometimes.
 
-17) In HomeView, two rightmost charts (Due & Tenants and Due & Payments) can have negative values for Due column. When it's negative, Rectangles should be drawn downwards BUT it doesn't. For the bottom right chart I've tried with a separate clip with negative and positive heights and it does draw column with positive clip but it doesn't draw anything for negative clip. Hmm, you can manipulate translateY and height at the same time, terrible!
+17) In HomeView, two rightmost charts (Due & Tenants and Due & Payments) can have negative values for Due column. When it's negative, Rectangles should be drawn downwards BUT it doesn't. For the bottom right chart I've tried with a separate clip with negative and positive heights and it does draw column with positive clip but it doesn't draw anything for negative clip. [Hack: you can manipulate translateY and height at the same time, terrible!]
 
 CREDITS
 ---------------------------
