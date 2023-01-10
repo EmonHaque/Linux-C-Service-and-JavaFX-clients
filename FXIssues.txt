@@ -13,7 +13,7 @@ JavaFX 19
 Instead of experimenting on nothing in 'JavaFX-CustomWindow-Button-Transition' repo decided to rewrite my WPF RentManager in JavaFX and see how it is. Appplication isn't complete yet so there're some disfuctional issues. 
 	Add view is kind of ok and functional, 
 	Report view is also kind of ok, maybe will apply some polish later. TextWrapping in TreeViews messes up reports. 	
-	Transaction view is also kind of ok, TreeView in BulkRent (Rent for Month) view has some issue.
+	Transaction view is also kind of ok, TreeView in BulkRent (Rent for Month) view has some issue (avoid clicking level 1).
 	HomeView is alo kind of ok.
 	NotificationView notifies only on plot add and plot edit by others (other instance of the Application will also work, userId has to be different), you can add more in AppData.java by looking at the WPF/C# version of Rentmanager
 ===========================================================
@@ -126,6 +126,30 @@ I've been doing these coding experiments since .net core 1 and all that I've wri
 16) ByteOrder is another problem, I've to write ByteOrder.LITTLE_ENDIAN all over! Before stepping into Linux, I thought Microssoft is the weird guy, flipped everything. My WPF/C# clients works fine with Windows C as well as Linux C without any change so it's Java the weird guy flipped everything for no reason. Is Java socket slower than C# socket? Your socekt socket doesn't provide all the functionalities that C# provides. For example, I cn't write a packet sniffer with Java socket. With C# socket I can and I've written a basic one I stare at sometimes.
 
 17) In HomeView, two rightmost charts (Due & Tenants and Due & Payments) can have negative values for Due column. When it's negative, Rectangles should be drawn downwards BUT it doesn't. For the bottom right chart I've tried with a separate clip with negative and positive heights and it does draw column with positive clip but it doesn't draw anything for negative clip. [Hack: you can manipulate translateY and height at the same time, terrible!]
+
+18) In Reports and Hove Views button click and/or state change starts Task. In all those places, except Home -> Due & Tenants, looks like it cancels and restarts task properly. In Home -> Due & Tenants, when you go crazy on refresh button, on top right corner, and continue clicking it for a minute or two nonstop, it works fine. If you go crazy on the Existing checkbox (BiState) below, it hangs! When you stop, after making it hang, you see it updates after a while. With the sample database (data.db) given here, it seems to work fine because the list is small add more tenants and see it stops responding. 
+
+SelectionBox is problematic because of your filtering system. Is you filtering makes it hang or my UI update in SelectionBox which depends on your filtering and ListChange Listener? Does it cancel filtering in these situation or continue until it's done?
+
+19) Started to get into new clueless issue! Today, 09 January 2023, when I hit the debug button, it stopped in class PropertyHelper, line return "true".equals(propVal.toLowerCase()); To get out of that added this -Djavafx.sg.warn="true" in vm argument. With that, when I hit Run (not debug) button and go to AddView, I see:
+
+	WARNING added to a new parent without first removing it from its current
+    		parent. It will be automatically removed from its current parent.
+    		
+and it points to these:
+
+	at abstracts.SelectionControlBase.setSelectedContent(SelectionControlBase.java:109)
+	at controls.SelectionBox.initializeUI(SelectionBox.java:77)
+	at controls.SelectionBox.<init>(SelectionBox.java:72)
+	at Views.Add.AddSpace.getUI(AddSpace.java:33)
+	at Views.Add.AddBase.onFirstSight(AddBase.java:27)
+	at controls.MainPanel.setView(MainPanel.java:222)
+
+when I set breakpoints at topmost call, hit debug and keep clicking continue, it passes without any warning/issue! If I don't debug and run without that vm args, everything works as expected! Later in the beginning of Controls/ClientApp I've added:
+
+	static { System.setProperty("javafx.sg.warn", "false"); }
+
+That's a horrible thing. 
 
 CREDITS
 ---------------------------
