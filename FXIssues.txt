@@ -153,7 +153,7 @@ That's a horrible thing.
 
 20) When you type in filter TextBox or SelectionBox, you see matching Text become blue and bold, I've similar HiText in WPF but I don't change forefround color, I set its background. Here in your TextFlow, you can't set background of Text.
 
-21) Popup doesn't block mouse click event. Go to Add -> Lease view, click the from DayPicker, popup appears. In between left/right arrows and Month, year text, there's empty space. Click the empty space, see TextArea below the Popup receives the event! Go to Reports -> Plot/Space/Tenant Ledger, make popup appear by clicking the from DayPicker and then click the empty space, see TextBox below receives the event.
+21) Popup doesn't block mouse click event. Go to Add -> Lease view, click the from DayPicker, popup appears. In between left/right arrows and Month, year text, there's empty space. Click the empty space, see TextArea below the Popup receives the event! Go to Reports -> Plot/Space/Tenant Ledger, make popup appear by clicking the from DayPicker and click the empty space, see TextBox below receives the event.
 
 You hit enter in a TextBox and ListView in a popup receives that event instead of TextBox. You click on a popup other controls below receives that event. WPF hasn't yet been able to break the popup wall and tunnel this kind of event but they do capture the mouse and kill it on popup so it doesn't flicker on my HomeView charts.
 
