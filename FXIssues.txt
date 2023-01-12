@@ -45,7 +45,7 @@ in the constructor. o.isExpiredProperty() is a property of the items contained i
 
 3) in RentManager/ViewModels/Edit/EditLeaseVM you see 'public FilteredList<Space> editSpace' and it relies on another Jar thing's extractor for filter. When you launch the application and go to Edit -> Lease, you see on the left side Asia in SelectionBox and Afghanistan, Indonesia and Iraq in a list below. When you select Afghanistan, you see right side is populated with some information. At the bottom right you see a pencil/edit button and if you click that, you see Asia, Afghanistan in SelectionBoxes on the right side. When you select, for example, Europe on the Plot SelectionBox on the right, you see Afghanistan in the following SelectionBox becomes England with another problem.
 
-These kind of filter with extractor in JavaFX invokes ListChangeListener.Change for every single item removed and/or added and since my SelectionBox relies on these changes, it's highly inefficient. For these kind of Filter, I use to get a single Reset event in WPF and do whatever I want to do. In javaFX, the thing I do on change is done, many times, for every single item added/removed when this type of filter is applied.
+These kind of filter with extractor in JavaFX invokes ListChangeListener.Change for every item removed and/or added and since my SelectionBox relies on these changes, it's highly inefficient. For these kind of Filter, I get a single Reset event in WPF and do whatever I want to do. In javaFX, the thing I do on change is done, many times, for every item added/removed when this type of filter is applied.
 
 4) in RentManager/ViewModels/Edit/EditLeaseVM you see these 3:
 
@@ -84,7 +84,7 @@ or the get call. When you call get before set it works as expected. Haven't been
 
 Charge & Collections view uses PinStack (Controls/controls/pinchart/PinStack.java) and Due & Tenants view uses PinColumn (Controls/controls/pinchart/PinColumn.java). In both of those you see 'private void onMouseEntered(MouseEvent e)' method which sets the x position of popup and calls show. If you click the "Existing" checkbox (BiState) in Due & Tenants view, you see another chart is drawn there and it's same popup issue and it uses (Controls/controls/columnstackchart/DoubleBar.java).
 
-Changed x,y to avoid some issue BUT it's unavoidavle when there's not enough room to display the popup and it's to appear below the mouse. Capture the mouse and kill it. How do you capture?
+Changed x,y to avoid some issue BUT it's unavoidable when there's not enough room to display the popup and it's to appear below the mouse. Capture the mouse and kill it. How do you capture?
 
 7) On bottom right of HomeView, you see "Due & Payments" and there's a CheckBox (BiState) to filter exisiting or left tenants. When you click that, filter is applied and 'onTenantChanged' method of TenantDetailVM is called multiple times and as a result it jams the Server with multiple requests. When you apply fiter to a list, you don't call add/remove on the list, you just reset the list.
 
@@ -101,7 +101,7 @@ In WPF you don't do these worthless things! For changing background and foregrou
             }
         });
 
-every subclass of Control will take this style. Same for Scrollbars, just one thing like that and everywhere scrollbars takes the style.
+every subclass of Control will take this style. Same for Scrollbars, just one thing like that and everywhere scrollbars take the style.
 
 9) In Detail Rent, Depost & Dues of HomeView, sometimes you don't see left part of white stroke when the revealing animation is in action. Looks like it starts drawing from the middle.
 
@@ -123,15 +123,15 @@ I've been doing these coding experiments since .net core 1 and all that I've wri
 
 15) Sometimes you see some movement in Cells in ListView/TreeView when mouse enters for the first time.
 
-16) ByteOrder is another problem, I've to write ByteOrder.LITTLE_ENDIAN all over! Before stepping into Linux, I thought Microssoft is the weird guy, flipped everything. My WPF/C# clients works fine with Windows C as well as Linux C without any change so it's Java the weird guy flipped everything for no reason. Is Java socket slower than C# socket? Your socekt socket doesn't provide all the functionalities that C# provides. For example, I cn't write a packet sniffer with Java socket. With C# socket I can and I've written a basic one I stare at sometimes.
+16) ByteOrder is another problem, I've to write ByteOrder.LITTLE_ENDIAN all over! Before stepping into Linux, I thought Microssoft is the weird guy, flipped everything. My WPF/C# clients works fine with Windows C as well as Linux C without any change so it's Java the weird guy flipped everything for no reason. Is Java socket slower than C# socket? Your socket doesn't provide all the functionalities that C# provides. For example, I cn't write a packet sniffer with Java socket. With C# socket I can and I've written a basic one I stare at sometimes.
 
 17) In HomeView, two rightmost charts (Due & Tenants and Due & Payments) can have negative values for Due column. When it's negative, Rectangles should be drawn downwards BUT it doesn't. For the bottom right chart I've tried with a separate clip with negative and positive heights and it does draw column with positive clip but it doesn't draw anything for negative clip. [Hack: you can manipulate translateY and height at the same time, terrible!]
 
-18) In Reports and Hove Views button click and/or state change starts Task. In all those places, except Home -> Due & Tenants, looks like it cancels and restarts task properly. In Home -> Due & Tenants, when you go crazy on refresh button, on top right corner, and continue clicking it for a minute or two nonstop, it works fine. If you go crazy on the Existing checkbox (BiState) below, it hangs! When you stop, after making it hang, you see it updates after a while. With the sample database (data.db) given here, it seems to work fine because the list is small add more tenants and see it stops responding. 
+18) In Reports and Home Views button click and/or state change starts Task. In all those places, except Home -> Due & Tenants, looks like it cancels and restarts task properly. In Home -> Due & Tenants, when you go crazy on refresh button, on top right corner, and continue clicking it for a minute or two nonstop, it works fine. If you go crazy on the Existing checkbox (BiState) below, it hangs! When you stop, after making it hang, you see it updates after a while. With the sample database (data.db) given here, it seems to work fine because the list is small add more tenants and see it stops responding. 
 
 SelectionBox is problematic because of your filtering system. Is you filtering makes it hang or my UI update in SelectionBox which depends on your filtering and ListChange Listener? Does it cancel filtering in these situation or continue until it's done?
 
-19) Started to get into new clueless issue! Today, 09 January 2023, when I hit the debug button, it stopped in class PropertyHelper, line return "true".equals(propVal.toLowerCase()); To get out of that added this -Djavafx.sg.warn="true" in vm argument. With that, when I hit Run (not debug) button and go to AddView, I see:
+19) Started to get into new clueless issue! Today, 09 January 2023, when I hit the debug button, it stopped in class PropertyHelper, line return "true".equals(propVal.toLowerCase()); To get out of that added -Djavafx.sg.warn="true" in vm argument. With that, when I hit Run (not debug) button and go to AddView, I see:
 
 	WARNING added to a new parent without first removing it from its current
     		parent. It will be automatically removed from its current parent.
@@ -145,11 +145,17 @@ and it points to these:
 	at Views.Add.AddBase.onFirstSight(AddBase.java:27)
 	at controls.MainPanel.setView(MainPanel.java:222)
 
-when I set breakpoints at topmost call, hit debug and keep clicking continue, it passes without any warning/issue! If I don't debug and run without that vm args, everything works as expected! Later in the beginning of Controls/ClientApp I've added:
+when I set breakpoints at topmost call, hit debug and keep clicking continue, it passes without any warning/issue! If I don't debug and run without that vm args, everything works as expected! Later, in the beginning of Controls/ClientApp I've added:
 
 	static { System.setProperty("javafx.sg.warn", "false"); }
 
 That's a horrible thing. 
+
+20) When you type in filter TextBox or SelectionBox, you see matching Text become blue and bold, I've similar HiText in WPF but I don't change forefround color, I set its background. Here in your TextFlow, you can't set background of Text.
+
+21) Popup doesn't block mouse click event. Go to Add -> Lease view, click the from DayPicker, pop appears. In between left/right arrows and Month, year text, there's empty space. Click the empty space, see TextArea below the Popup receives the event! Go to Reports -> Plot/Space/Tenant Ledger, make popup appear by clicking the from DayPicker and then click the empty space, see TextBox below receives the event.
+
+You hit enter in a TextBox and ListView in a popup receives that event instead of TextBox. You click on a popup other controls below receives that event. WPF hasn't yet been able to break the popup wall and tunnel this kind of event but they do capture the mouse and kill it on popup so it doesn't flicker on my HomeView charts.
 
 CREDITS
 ---------------------------
