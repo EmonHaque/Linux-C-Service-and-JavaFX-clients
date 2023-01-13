@@ -1,5 +1,5 @@
 Distro: Void Linux x64/glibc 
-Kernel: 6.1.3_1
+Kernel: 6.1.4_1
 DE: X11/GNOME 43.2
 Resolution: 3840 x 2160
 Scaling: 200%
@@ -151,11 +151,27 @@ when I set breakpoints at topmost call, hit debug and keep clicking continue, it
 
 That's a horrible thing. 
 
-20) When you type in filter TextBox or SelectionBox, you see matching Text become blue and bold, I've similar HiText in WPF but I don't change forefround color, I set its background. Here in your TextFlow, you can't set background of Text.
+20) When you type in filter TextBox or SelectionBox, you see matching Text become blue and bold, I've similar HiText in WPF but I don't change foreground, I set its background. Here in your TextFlow, you can't set background of Text.
 
 21) Popup doesn't block mouse click event. Go to Add -> Lease view, click the from DayPicker, popup appears. In between left/right arrows and Month, year text, there's empty space. Click the empty space, see TextArea below the Popup receives the event! Go to Reports -> Plot/Space/Tenant Ledger, make popup appear by clicking the from DayPicker and click the empty space, see TextBox below receives the event.
 
 You hit enter in a TextBox and ListView in a popup receives that event instead of TextBox. You click on a popup other controls below receives that event. WPF hasn't yet been able to break the popup wall and tunnel this kind of event but they do capture the mouse and kill it on popup so it doesn't flicker on my HomeView charts.
+
+22) All 5 views of AddView have TextArea. When you hit tab on those textarea, it accepts it. In most cases, next focusable element should be focused. Looks like your Focus API is private and one can't change the behavior!  
+
+23) There're some unexpected behavor which you, probably, can't reproduce but experience sometimes. For example, when you click SelectionBox, popup should appear on first click BUT I've seen it failing on first click.
+
+24) Another problem is you can't handle focus properly. Go to Transactions and in Regular View, remove Mr. A from top (Tenant) SelectionBox by clicking the close button. Type g in the box and the popup will, kind of, disappear. Keep Tenant SelectionBox in that state and click on Receivable (Control) SelectionBox, another popup will appear. Leave it open and move mouse to Tenant SelectionBox and backspace to remove g and type a. In Tenant SelectionBox's popup there'll be Mr. A only. Now, hit down arrow, see where's your focus and who handles the event!
+
+You've TextField of Tenant SelectionBox and ListView of Control SelectionBox's popup focused at the same time. Up/Down is being handled by the ListView of Control SelectionBox while cursor is blinking in the TextField of Tenant SelectionBox. Type b in this state and see it appears in the TextField of Tenant SelectionBox.
+
+25) Some of your text wrapping issue, which is also an issue in my application, in TreeCell has been reported 12 years ago and, atleast one (I've seen), you've marked as tbd a decade ago.
+
+26) Indentation changes in TreeView! Go to Transactions, reduce the height of the window in such a way that you see, Level 1, Europe (2) but you don't see, Level 2, Finland and Poland. Type abc in search box and remove abc with backspace. Scroll down to see the position of Finland and Poland. Atleast one of them will be misaligned and sometimes they both!
+
+There's a 'private void onItemsChanged(ListChangeListener.Change<? extends Lease> change)' in BulkRentTree.java and in that there's a sort() method call and that may cause this issue so comment out the first part and uncomment the second part, run, reduce the window height as before, do the same and see it still has some indentation issue.
+
+You may realise, at some point, you've to revamp your framework "to rule them all". When you do, don't forget to get rid of your worthless CSS, root cause of many problem for sure. The more I'm getting into it, the more I'm realizing that it's the "invincible" Java:FX, you can't fix it! 12 years have gone by and text wrapping issue in TreeCell is still tbd in your bug-tracker. You create and live with problem instead of solving a problem!
 
 CREDITS
 ---------------------------
