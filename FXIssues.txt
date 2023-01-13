@@ -167,7 +167,7 @@ You've TextField of Tenant SelectionBox and ListView of Control SelectionBox's p
 
 25) Some of your text wrapping issue, which is also an issue in my application, in TreeCell has been reported 12 years ago and, atleast one (I've seen), you've marked as tbd a decade ago.
 
-26) Indentation changes in TreeView! Go to Transactions, reduce the height of the window in such a way that you see, Level 1, Europe (2) but you don't see, Level 2, Finland and Poland. Type abc in search box and remove abc with backspace. Scroll down to see the position of Finland and Poland. Atleast one of them will be misaligned and sometimes they both are!
+26) Indentation changes in TreeView! Go to Transactions, reduce the height of the window in such a way that you see, Level 1, Europe (2) but you don't see, Level 2, Finland and Poland. Type abc in search box and remove abc with backspace. Make sure mouse doesn't go over the TreeView, scroll down to see the position of Finland and Poland. Atleast one of them will be misaligned and sometimes they both are!
 
 There's a 'private void onItemsChanged(ListChangeListener.Change<? extends Lease> change)' in BulkRentTree.java and in that there's a sort() method call and that may cause this issue so comment out the first part and uncomment the second part, run, reduce the window height as before, do the same and see it still has some indentation issue.
 
