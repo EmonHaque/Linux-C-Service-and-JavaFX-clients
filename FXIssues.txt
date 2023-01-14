@@ -13,9 +13,39 @@ JavaFX 19
 Instead of experimenting on nothing in 'JavaFX-CustomWindow-Button-Transition' repo decided to rewrite my WPF RentManager in JavaFX and see how it is. Appplication isn't complete yet so there're some disfuctional issues. 
 	Add view is kind of ok and functional, 
 	Report view is also kind of ok, maybe will apply some polish later. TextWrapping in TreeViews messes up reports. 	
-	Transaction view is also kind of ok, TreeView in BulkRent (Rent for Month) view has some issue (avoid clicking level 1).
+	Transaction view is also kind of ok, TreeView in BulkRent (Rent for Month) view has some issue.
 	HomeView is alo kind of ok.
-	NotificationView notifies only on plot add and plot edit by others (other instance of the Application will also work, userId has to be different), you can add more in AppData.java by looking at the WPF/C# version of Rentmanager
+	NotificationView notifies only on plot add and plot edit by others (other instance of the Application will also work, userId has to be different), you can add more in AppData.java by looking at the WPF/C# version of Rentmanager.
+----------------------------------------------------------
+
+build the artifacts (jar)
+Create a RentManager folder in home, put that jar and the icon.png from resource folder in that and add a script there like this:
+	
+#!/bin/bash
+FX=/mnt/HDD/openjfx19/sdk/lib
+
+java \
+-Xms1G \
+-Xmx4G \
+--module-path $FX \
+--add-modules javafx.controls \
+-jar /home/emon/RentManager/RentManager.jar
+
+create a rentmanager.desktop file like this:
+
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=Rent Manager
+Icon=/home/emon/RentManager/icon.png
+Exec=/home/emon/RentManager/RentManager.sh
+Terminal=true
+Categories=Utility
+
+and place it in /usr/share/applications to make it appear in application menu.
+
+	
+if you don't want to see terminal, set Terminal=false. Hopefully, it will work with following issues.
 ===========================================================
 
 1) each module has a ridiculous folder/package, I wanted to keep those files (in ridiculous package) in the root directory and reference those in other files in the same or other module. You can't do that!
@@ -115,7 +145,7 @@ One more issue is Number formatting. In WPF, I provide three semicolon separated
 
 12) In AddView, SVGs are all over but few of them looks ok. Compare these with that of WPF to see how beautifully WPF draws those same icons in AddView.
 
-13) On top right 2 views of HomeView, there're tooltips and in that a ListView. Even if there's a few items, it shows big empty list. In SelectionBox I've used Controls/skinned/ExtendedResizableListView. It also fails to resize sometimes. These List/TreeViews should be resized automatically in Popup.
+13) On top right 2 views of HomeView, there're tooltips and in that a ListView. Even if there's a few items, it shows big empty list. In SelectionBox I've used Controls/skinned/ExtendedResizableListView. It also fails to resize sometimes. These List/TreeViews should be resized automatically in Popup. [See 27 for hack/solution]
 
 14) You can't provide custom Paper to Printer. In Reports -> Balances, Reports -> RP & LJ, and Reports -> Plot/Space/Tenant views there're options for printing. 'public void setPaper(Paper paper)' of Services/ridiculous/Press sets the Paper selected in Controls/dialogs/PrinterSelectionDialog. Wanted to give it a Custom Paper (8.5" x 11.7") with 0.5" Margin but you can't instantiate Paper! Looks like once upon a time people could provide custom paper but you broke that by making that API private.
 
@@ -175,7 +205,29 @@ You may realise, at some point, you've to revamp your framework "to rule them al
 
 27) Sometimes, you can't visualize this issue with the provided (data.db) database, you've to add more entries. The issue is in the popup of two top-right charts of HomeView. So in both chart's 'private class Tip' I've added some fake data to demonstrate. Launch the app, click on the rightmost pin of Charge & Collection view's chart. Popup will stay open, type e in the search box of popup, see the problem? Click the rightmost pincolumn of Due & Tenants view's chart, type e in the search box to see the same problem.
 
-Borderpane, content of Popup, doesn't know that the listview's been resized. Top and bottom of the Borderpane sticks together and the ListCells are rendered, in transparent background, beyond the bound of the unaware BorderPane! If you use fixed size ListView, you don't get into this issue. Problem is, you've to have resizable ListView in these popup. I'll comment out these fake data parts, in later release, if I keep torching down the rat-hole further.
+Borderpane, content of Popup, doesn't know that the listview's been resized. Top and bottom of the Borderpane sticks together and the ListCells are rendered, in transparent background, beyond the bound of the unaware BorderPane! If you use fixed size ListView, you don't get into this issue. Problem is, you've to have resizable ListView in these popup. I'll comment out these fake data parts, in later release, if I keep torching down the rat-hole farther.
+
+In the ListChangeListener of ExtendedResizableListView, there was a calcHeight initialized as 0 and computed in wasAdded and wasRemoved. The problem was calcHeight remained 0 after the computation in wasAdded/wasRemoved. I've removed those wasAdded/wasRemoved altogether and added this:
+
+    private void resetHeight(){
+        double height = 0;
+        for(int i = 0; i < list.size(); i++){
+            height += vFlow.getCell(i).getHeight();
+        }
+        vBar.setOpacity(height < getMaxHeight() ? 0 : 1);
+        setPrefHeight(Math.min(getMaxHeight(), height));
+    }
+
+and in the layoutChildren method of ExtendedResizableListView:
+
+        if(!isLoaded){
+            isLoaded = true;
+            vBar = ((ExtendedResizableVirtualFlow <?>)vFlow).vBar;
+            list.addListener((ListChangeListener.Change<? extends T> change) -> resetHeight());
+            Platform.runLater(this::resetHeight);
+        }
+
+Platform.runLater(this::resetHeight) is for initial height computation. Without the Platform.runLater, you get wrong height.
 
 CREDITS
 ---------------------------
