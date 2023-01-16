@@ -229,6 +229,8 @@ and in the layoutChildren method of ExtendedResizableListView:
 
 Platform.runLater(this::resetHeight) is for initial height computation. Without the Platform.runLater, you get wrong height.
 
+28) You TreeView is useless when it comes to multiline wrapped Text in TextFlow inside GridPane column. I've tried setting prefWidth of the TextFlow, wrappingWidth in Text, prefHeight of TreeCell and finally compute/Min/Max/PrefHeight of TreeCell! None of these works abd your TreeView displays some acrobatic show when you expand/collapse nodes. Sometimes you see extra space abouve and below cell, sometimes cells overlaps, sometimes cell jumps when you expand a node. To have a better view of the acrobatic show of your TreeView, see Play with HBView of 'JavaFX-CustomWindow-Button-Transition/FXTest-linux 19 December 2022' repo.
+
 CREDITS
 ---------------------------
 1) Your Bindings are great with your Simps (short for Simple...Property). In WPF you've to deal with a lot of string bindings and converters.
