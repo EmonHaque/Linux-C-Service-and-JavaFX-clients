@@ -231,6 +231,8 @@ Platform.runLater(this::resetHeight) is for initial height computation. Without 
 
 28) Your TreeView is useless when it comes to multiline wrapped Text in TextFlow inside GridPane column. I've tried setting prefWidth of the TextFlow, wrappingWidth in Text, prefHeight of TreeCell and finally compute/Min/Max/PrefHeight of TreeCell! None of these works and your TreeView displays some acrobatic show when you expand/collapse nodes. Sometimes you see extra space abouve and below cell, sometimes cells overlaps, sometimes cell jumps when you expand a node. To have a better view of the acrobatic show of your TreeView, play with the TreeVieew in HBView of 'JavaFX-CustomWindow-Button-Transition/FXTest-linux 19 December 2022' repo.
 
+29) TreeCell'w width grows and right part is cutoff. On top right corner of Transactions -> Regular view, there're two section in two TreeView. Top one (Date, Deposit, Due) is SecurityDueTree and the bottom one (Date, Mode, Amount) is PaymentTree. If you keep scrolling up/down the bottom TreeView (PaymentTree), you'll see right part of some cells get cutoff. Code and cell factory for the treeview is in RentManager/trees/PaymentTree.java.
+
 CREDITS
 ---------------------------
 1) Your Bindings are great with your Simps (short for Simple...Property). In WPF you've to deal with a lot of string bindings and converters.
