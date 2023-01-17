@@ -27,3 +27,4 @@ reminder:
 Windows C query of getTenantDetail should be updated
 Windows C query of getDepositDueRent should be updated
 Windows C editSpace should be updated
+getLastDueAndPayment functionality should be added in Windows C and WPF TransactionBase
