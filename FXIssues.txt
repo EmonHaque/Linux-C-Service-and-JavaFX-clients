@@ -8,7 +8,7 @@ CPU: Intel Core i3 10100F x 8
 GPU: NVIDIA GeForce GT 730 (kepler)
 IDE: IntelliJ IDEA 2022.3.1 (Community Edition)
 openjdk 19.0.1 2022-10-18
-JavaFX 19
+JavaFX 19.0.2
 ===========================================================
 Instead of experimenting on nothing in 'JavaFX-CustomWindow-Button-Transition' repo decided to rewrite my WPF RentManager in JavaFX and see how it is. Appplication isn't complete yet so there're some disfuctional issues. 
 	Add view is kind of ok and functional, 
@@ -229,11 +229,14 @@ and in the layoutChildren method of ExtendedResizableListView:
 
 Platform.runLater(this::resetHeight) is for initial height computation. Without the Platform.runLater, you get wrong height.
 
-28) Your TreeView is useless when it comes to multiline wrapped Text in TextFlow inside GridPane column. I've tried setting prefWidth of the TextFlow, wrappingWidth in Text, prefHeight of TreeCell and finally compute/Min/Max/PrefHeight of TreeCell! None of these works and your TreeView displays some acrobatic show when you expand/collapse nodes. Sometimes you see extra space abouve and below cell, sometimes cells overlaps, sometimes cell jumps when you expand/select a node or scroll. To have a better view of the acrobatic show of your TreeView, play with the TreeVieew in HBView of 'JavaFX-CustomWindow-Button-Transition/FXTest-linux 19 December 2022' repo.
+28) Your TreeView is useless when it comes to multiline wrapped Text in TextFlow inside GridPane column. I've tried setting prefWidth of the TextFlow, wrappingWidth in Text, prefHeight of TreeCell and finally compute/Min/Max/PrefHeight of TreeCell! None of these works and your TreeView displays some acrobatic show when you expand/collapse nodes. Sometimes you see extra space abouve and below cell, sometimes cells overlaps, sometimes cell jumps when you expand/select a node or scroll. To have a better view of the acrobatic show of your TreeView, play with the TreeVieew in HBView of 'JavaFX-CustomWindow-Button-Transition/FXTest-linux 19 December 2022' repo.[Hack see Controls/WrapTreeCellBase and subclasses]
 
 29) TreeCell'w width grows and right part is cutoff. On top right corner of Transactions -> Regular view, there're two section in two TreeView. Top one (Date, Deposit, Due) is LastSecurityDueTree and the bottom one (Date, Mode, Amount) is LastPaymentTree. If you keep scrolling up/down the bottom TreeView (PaymentTree), you'll see right part of some cells gets cutoff. Same thing happens you keep collapsing/expanding nodes. Code and cell factory for the treeview is in RentManager/trees/LastPaymentTree.java.
 
 To solve the growing width issue, you can wrap the Text of first Column in a TextFlow/FlowPane, which I've done, and set HGrow.Always in the ColumnConstraint and enjoy the acrobatic show of growing/shrinking height, if there's wrapped multiline Text.
+
+I don't know whether the hack will work in all cases. What a terrible TreeView you've made? It took +/-20 hours to figuare out what's going on! [Hack see Controls/WrapTreeCellBase and subclasses],
+
 
 CREDITS
 ---------------------------
