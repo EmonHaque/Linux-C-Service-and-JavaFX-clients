@@ -235,7 +235,7 @@ Platform.runLater(this::resetHeight) is for initial height computation. Without 
 
 To solve the growing width issue, you can wrap the Text of first Column in a TextFlow/FlowPane, which I've done, and set HGrow.Always in the ColumnConstraint and enjoy the acrobatic show of growing/shrinking height, if there's wrapped multiline Text.
 
-I don't know whether the hack will work in all cases. What a terrible TreeView you've made? It took +/-20 hours to figuare out what's going on! [Hack see Controls/WrapTreeCellBase and subclasses],
+I don't know whether the hack will work in all cases. What a terrible TreeView you've made? It took +/-20 hours to figure out what's going on! [Hack see Controls/WrapTreeCellBase and subclasses],
 
 
 CREDITS
