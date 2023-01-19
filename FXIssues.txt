@@ -10,7 +10,7 @@ IDE: IntelliJ IDEA 2022.3.1 (Community Edition)
 openjdk 19.0.1 2022-10-18
 JavaFX 19.0.2
 ===========================================================
-Instead of experimenting on nothing in 'JavaFX-CustomWindow-Button-Transition' repo decided to rewrite my WPF RentManager in JavaFX and see how it is. U think it's ok now except for NotificationView, which notifies only on plot add and plot edit by others (other instance of the Application will also work, userId has to be different), you can add more in AppData.java by looking at the WPF/C# version of Rentmanager. major issue is JavaFX filtering System and because of that SelectionBox will cause some issue. I'll use it to see whether there's any other things to solve. AND later I'll remove some of the points noted below that's already been fixed.
+Instead of experimenting on nothing in 'JavaFX-CustomWindow-Button-Transition' repo decided to rewrite my WPF RentManager in JavaFX and see how it is. I think it's ok now except for NotificationView, which notifies only on plot add and plot edit by others (other instance of the Application will also work, userId has to be different), you can add more in AppData.java by looking at the WPF/C# version of Rentmanager. major issue is JavaFX filtering System and because of that SelectionBox will cause some issue. I'll use it to see whether there's any other things to solve. AND later I'll remove some of the points noted below that's already been fixed.
 ----------------------------------------------------------
 
 build the artifacts (jar)
