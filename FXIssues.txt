@@ -174,6 +174,8 @@ You've TextField of Tenant SelectionBox and ListView of Control SelectionBox's p
 
 18) You may realise, at some point, you've to revamp your framework "to rule them all". When you do, don't forget to get rid of your worthless CSS, root cause of many problem for sure. The more I'm getting into it, the more I'm realizing that it's the "invincible" Java:FX, you can't fix it! 12 years have gone by and text wrapping issue in TreeCell is still tbd in your bug-tracker. You create and live with problem instead of solving a problem!
 
+19) In linux Y position of TreeCell disclosure node looks ok. With the same setup in WrapTreeCellBase, Y position is wrong in Windows 10!
+
 CREDITS
 ---------------------------
 1) Your Bindings are great with your Simps (short for Simple...Property). In WPF you've to deal with a lot of string bindings and converters.
