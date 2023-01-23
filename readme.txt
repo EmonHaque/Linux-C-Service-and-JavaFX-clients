@@ -1,5 +1,3 @@
-Experimental, on Void Linux, not sure how far will I go with JavaFX!
-
 1) Place data.db somewhere and replace the location in this
 
 	'char *database = "/mnt/HDD/data.db";'
