@@ -10,7 +10,7 @@ IDE: IntelliJ IDEA 2022.3.1 (Community Edition)
 openjdk 19.0.1 2022-10-18
 JavaFX 19.0.2
 ===========================================================
-Instead of experimenting on nothing in 'JavaFX-CustomWindow-Button-Transition' repo decided to rewrite my WPF RentManager in JavaFX and see how it is. I think it's ok now except for NotificationView, which notifies only on plot add and plot edit by others (other instance of the Application will also work, userId has to be different), you can add more in AppData.java by looking at the WPF/C# version of Rentmanager. Major issue is JavaFX filtering System and because of that SelectionBox will cause some issue. I'll use it to see whether there's any other thing to solve. AND later I'll remove some of the points noted below that's already been fixed.
+Instead of experimenting on nothing in 'JavaFX-CustomWindow-Button-Transition' repo decided to rewrite my WPF RentManager in JavaFX and see how it is. I think it's ok now except for NotificationView, which notifies only on plot add and plot edit by others (other instance of the Application will also work, userId has to be different), you can add more in AppData.java by looking at the WPF/C# version of Rentmanager. Major issue is JavaFX filtering System and because of that SelectionBox will cause some issue. I'll use it to see whether there's any other thing to solve. AND later I'll remove some of the points noted below that's already been fixed. Removed?Merged some points.
 ----------------------------------------------------------
 
 build the artifacts (jar)
@@ -72,6 +72,8 @@ in the constructor. o.isExpiredProperty() is a property of the items contained i
 
 These kind of filter with extractor in JavaFX invokes ListChangeListener.Change for every item removed and/or added and since my SelectionBox relies on these changes, it's highly inefficient. For these kind of Filter, I get a single Reset event in WPF and do whatever I want to do. In javaFX, the thing I do on change is done, many times, for every item added/removed when this type of filter is applied.
 
+On bottom right of HomeView, you see "Due & Payments" and there's a CheckBox (BiState) to filter exisiting or left tenants. When you click that, filter is applied and 'onTenantChanged' method of TenantDetailVM is called multiple times and as a result it jams the Server with multiple requests. When you apply fiter to a list, you don't call add/remove on the list, you just reset the list. If you go crazy, keep clicking nonstop, on the Existing checkbox (BiState) below, it hangs!
+
 4) in RentManager/ViewModels/Edit/EditLeaseVM you see these 3:
 
 	public void cloneSelected()
@@ -103,17 +105,13 @@ from 'onEditedPlotIdChanged' method, Launch the App, Select Afghanistan in Edit 
 
 or the get call. When you call get before set it works as expected. Haven't been able to figure out why do I need that get call before set!
 
-5) in RentManager/Views/Transaction/Bulkrent, there's a TreeView. When you launch the application and go to Transaction view, you see that on the left side. Problem is you can select Level 1 Treeitems of the TreeView. If you disable Level 1 by calling setDisable in the updateItem method of TreeCell, it works BUT you can't expand/collapse nodes anymore.
-
-6) On bottom left of HomeView (Rent, Deposit & Dues), click the Asia Slice, you see two charts on top right are drawn. When you hover over chart elements on Charge & Collections view, you see popup appears. Keep moving the mouse see popup starts flickering. In addition to that flickering issue, Due & Tenants view has one more problem. It can't even show the popup when you hover over the righmost chart element. That's because I've hide call on popup when mouse exits the chart element and when mouse is over popup chart element receives mouse exited event! I've similar draggable popup in WPF on those views and I've no issue there.
+5) [Read last para] On bottom left of HomeView (Rent, Deposit & Dues), click the Asia Slice, you see two charts on top right are drawn. When you hover over chart elements on Charge & Collections view, you see popup appears. Keep moving the mouse see popup starts flickering. In addition to that flickering issue, Due & Tenants view has one more problem. It can't even show the popup when you hover over the righmost chart element. That's because I've hide call on popup when mouse exits the chart element and when mouse is over popup chart element receives mouse exited event! I've similar draggable popup in WPF on those views and I've no issue there.
 
 Charge & Collections view uses PinStack (Controls/controls/pinchart/PinStack.java) and Due & Tenants view uses PinColumn (Controls/controls/pinchart/PinColumn.java). In both of those you see 'private void onMouseEntered(MouseEvent e)' method which sets the x position of popup and calls show. If you click the "Existing" checkbox (BiState) in Due & Tenants view, you see another chart is drawn there and it's same popup issue and it uses (Controls/controls/columnstackchart/DoubleBar.java).
 
 Changed x,y to avoid some issue BUT it's unavoidable when there's not enough room to display the popup and it's to appear below the mouse. Capture the mouse and kill it. How do you capture?
 
-7) On bottom right of HomeView, you see "Due & Payments" and there's a CheckBox (BiState) to filter exisiting or left tenants. When you click that, filter is applied and 'onTenantChanged' method of TenantDetailVM is called multiple times and as a result it jams the Server with multiple requests. When you apply fiter to a list, you don't call add/remove on the list, you just reset the list.
-
-8) In Controls module, you see two packages, skins and skinned. Things in those are necessary mostly because of your useless and worthless css. For every control, you either need to write some css for that control or subclass and do some worthless things I've done in those packages.
+6) In Controls module, you see two packages, skins and skinned. Things in those are necessary mostly because of your useless and worthless css. For every control, you either need to write some css for that control or subclass and do some worthless things I've done in those packages.
 
 In WPF you don't do these worthless things! For changing background and foreground you just write one thing! Here's an example:
 
@@ -128,35 +126,19 @@ In WPF you don't do these worthless things! For changing background and foregrou
 
 every subclass of Control will take this style. Same for Scrollbars, just one thing like that and everywhere scrollbars take the style.
 
-9) In Detail Rent, Depost & Dues of HomeView, sometimes you don't see left part of white stroke when the revealing animation is in action. Looks like it starts drawing from the middle.
+7) In Detail Rent, Depost & Dues of HomeView, sometimes you don't see left part of white stroke when the revealing animation is in action. Looks like it starts drawing from the middle.
 
-10) There's no PrintDialog like WPF/Windows where it lists all the printers including PDF. In Report -> Plot/Space/Tenant ledger, there's a print button on top right in the second row. If you've multiple printers or one printer and virtual pdf printer, you'll see a weird Printer selection dialog appears when you click that. That's in Controls/dialogs/PrinterSelectionDialog. 
+8) In AddView, SVGs are all over but few of them looks ok. Compare these with that of WPF to see how beautifully WPF draws those same icons in AddView.
 
-By default when document is printed fonts are too large compared to WPF/Windows. I've set the font size to 9 in the PrintTask of Rentmanager/ViewModels/BaseLedgerVM.
-
-One more issue is Number formatting. In WPF, I provide three semicolon separated format for positive, negative and zeros. Your DecimalFormat can handle up to two arguments, ie., positive and negative only! Nothing for zeros.
-
-11) In Reports -> Space, you see a SelectionBox on top left. Multiple Plots can have same space name so I've grouped ListBox in WPF. Here in JavaFX I can't group items in ListView.
-
-12) In AddView, SVGs are all over but few of them looks ok. Compare these with that of WPF to see how beautifully WPF draws those same icons in AddView.
-
-13) On top right 2 views of HomeView, there're tooltips and in that a ListView. Even if there's a few items, it shows big empty list. In SelectionBox I've used Controls/skinned/ExtendedResizableListView. It also fails to resize sometimes. These List/TreeViews should be resized automatically in Popup. [See 27 for hack/solution]
-
-14) You can't provide custom Paper to Printer. In Reports -> Balances, Reports -> RP & LJ, and Reports -> Plot/Space/Tenant views there're options for printing. 'public void setPaper(Paper paper)' of Services/ridiculous/Press sets the Paper selected in Controls/dialogs/PrinterSelectionDialog. Wanted to give it a Custom Paper (8.5" x 11.7") with 0.5" Margin but you can't instantiate Paper! Looks like once upon a time people could provide custom paper but you broke that by making that API private.
+9) You can't provide custom Paper to Printer. In Reports -> Balances, Reports -> RP & LJ, and Reports -> Plot/Space/Tenant views there're options for printing. 'public void setPaper(Paper paper)' of Services/ridiculous/Press sets the Paper selected in Controls/dialogs/PrinterSelectionDialog. Wanted to give it a Custom Paper (8.5" x 11.7") with 0.5" Margin but you can't instantiate Paper! Looks like once upon a time people could provide custom paper but you broke that by making that API private.
 
 I've been doing these coding experiments since .net core 1 and all that I've written so far compiles and runs in .net 7. There's not that much breaking change in .net. I'd to put an if guard in my line chart loaded animation probably in .net 3/4/5 and that's the only breaking change so far.
 
-15) Sometimes you see some movement in Cells in ListView/TreeView when mouse enters for the first time.
+10) Sometimes you see some movement in Cells in ListView/TreeView when mouse enters for the first time.
 
-16) ByteOrder is another problem, I've to write ByteOrder.LITTLE_ENDIAN all over! Before stepping into Linux, I thought Microssoft is the weird guy, flipped everything. My WPF/C# clients works fine with Windows C as well as Linux C without any change so it's Java the weird guy flipped everything for no reason. Is Java socket slower than C# socket? Your socket doesn't provide all the functionalities that C# provides. For example, I cn't write a packet sniffer with Java socket. With C# socket I can and I've written a basic one I stare at sometimes.
+11) ByteOrder is another problem, I've to write ByteOrder.LITTLE_ENDIAN all over! Before stepping into Linux, I thought Microssoft is the weird guy, flipped everything. My WPF/C# clients works fine with Windows C as well as Linux C without any change so it's Java the weird guy flipped everything for no reason. Is Java socket slower than C# socket? Your socket doesn't provide all the functionalities that C# provides. For example, I cn't write a packet sniffer with Java socket. With C# socket I can and I've written a basic one I stare at sometimes.
 
-17) In HomeView, two rightmost charts (Due & Tenants and Due & Payments) can have negative values for Due column. When it's negative, Rectangles should be drawn downwards BUT it doesn't. For the bottom right chart I've tried with a separate clip with negative and positive heights and it does draw column with positive clip but it doesn't draw anything for negative clip. [Hack: you can manipulate translateY and height at the same time, terrible!]
-
-18) In Reports and Home Views button click and/or state change starts Task. In all those places, except Home -> Due & Tenants, looks like it cancels and restarts task properly. In Home -> Due & Tenants, when you go crazy on refresh button, on top right corner, and continue clicking it for a minute or two nonstop, it works fine. If you go crazy on the Existing checkbox (BiState) below, it hangs! When you stop, after making it hang, you see it updates after a while. With the sample database (data.db) given here, it seems to work fine because the list is small add more tenants and see it stops responding. 
-
-SelectionBox is problematic because of your filtering system. Is you filtering makes it hang or my UI update in SelectionBox which depends on your filtering and ListChange Listener? Does it cancel filtering in these situation or continue until it's done?
-
-19) Started to get into new clueless issue! Today, 09 January 2023, when I hit the debug button, it stopped in class PropertyHelper, line return "true".equals(propVal.toLowerCase()); To get out of that added -Djavafx.sg.warn="true" in vm argument. With that, when I hit Run (not debug) button and go to AddView, I see:
+12) Started to get into new clueless issue! Today, 09 January 2023, when I hit the debug button, it stopped in class PropertyHelper, line return "true".equals(propVal.toLowerCase()); To get out of that added -Djavafx.sg.warn="true" in vm argument. With that, when I hit Run (not debug) button and go to AddView, I see:
 
 	WARNING added to a new parent without first removing it from its current
     		parent. It will be automatically removed from its current parent.
@@ -176,62 +158,21 @@ when I set breakpoints at topmost call, hit debug and keep clicking continue, it
 
 That's a horrible thing. 
 
-20) When you type in filter TextBox or SelectionBox, you see matching Text become blue and bold, I've similar HiText in WPF but I don't change foreground, I set its background. Here in your TextFlow, you can't set background of Text.
+13) When you type in filter TextBox or SelectionBox, you see matching Text become blue and bold, I've similar HiText in WPF but I don't change foreground, I set its background. Here in your TextFlow, you can't set background of Text.
 
-21) Popup doesn't block mouse click event. Go to Add -> Lease view, click the from DayPicker, popup appears. In between left/right arrows and Month, year text, there's empty space. Click the empty space, see TextArea below the Popup receives the event! Go to Reports -> Plot/Space/Tenant Ledger, make popup appear by clicking the from DayPicker and click the empty space, see TextBox below receives the event. Modified some code so you don't see the movement of hint BUT you see cursor changes.
+14) Popup doesn't block mouse click event. Go to Add -> Lease view, click the from DayPicker, popup appears. In between left/right arrows and Month, year text, there's empty space. Click the empty space, see TextArea below the Popup receives the event! Go to Reports -> Plot/Space/Tenant Ledger, make popup appear by clicking the from DayPicker and click the empty space, see TextBox below receives the event. Modified some code so you don't see the movement of hint BUT you see cursor changes.
 
 You hit enter in a TextBox and ListView in a popup receives that event instead of TextBox. You click on a popup other controls below receives that event. WPF hasn't yet been able to break the popup wall and tunnel this kind of event but they do capture the mouse and kill it on popup so it doesn't flicker on my HomeView charts.
 
-22) All 5 views of AddView have TextArea. When you hit tab on those textarea, it accepts it. In most cases, next focusable element should be focused. Looks like your Focus API is private and one can't change the behavior!  
+15) All 5 views of AddView have TextArea. When you hit tab on those textarea, it accepts it. In most cases, next focusable element should be focused. Looks like your Focus API is private and one can't change the behavior!  
 
-23) There're some unexpected behavor which you, probably, can't reproduce but experience sometimes. For example, when you click SelectionBox, popup should appear on first click BUT I've seen it failing on first click.
+16) Another unexpected behavor which you, probably, can't reproduce but experience sometimes. For example, when you click SelectionBox, popup should appear on first click BUT I've seen it failing on first click.
 
-24) Another problem is you can't handle focus properly. Go to Transactions and in Regular View, remove Mr. A from top (Tenant) SelectionBox by clicking the close button. Type g in the box and the popup will, kind of, disappear. Keep Tenant SelectionBox in that state and click on Receivable (Control) SelectionBox, another popup will appear. Leave it open and move mouse to Tenant SelectionBox and backspace to remove g and type a. In Tenant SelectionBox's popup there'll be Mr. A only. Now, hit down arrow, see where's your focus and who handles the event!
+17) [Modified some code so you can't do these now BUT the problem exists] You can't handle focus properly. Go to Transactions and in Regular View, remove Mr. A from top (Tenant) SelectionBox by clicking the close button. Type g in the box and the popup will, kind of, disappear. Keep Tenant SelectionBox in that state and click on Receivable (Control) SelectionBox, another popup will appear. Leave it open and move mouse to Tenant SelectionBox and backspace to remove g and type a. In Tenant SelectionBox's popup there'll be Mr. A only. Now, hit down arrow, see where's your focus and who handles the event!
 
 You've TextField of Tenant SelectionBox and ListView of Control SelectionBox's popup focused at the same time. Up/Down is being handled by the ListView of Control SelectionBox while cursor is blinking in the TextField of Tenant SelectionBox. Type b in this state and see it appears in the TextField of Tenant SelectionBox.
 
-25) Some of your text wrapping issue, which is also an issue in my application, in TreeCell has been reported 12 years ago and, atleast one (I've seen), you've marked as tbd a decade ago.
-
-26) Indentation changes in TreeView! Go to Transactions, reduce the height of the window in such a way that you see, Level 1, Europe (2) but you don't see, Level 2, Finland and Poland. Type abc in search box and remove abc with backspace. Make sure mouse doesn't go over the TreeView, scroll down to see the position of Finland and Poland. Atleast one of them will be misaligned and sometimes they both are!
-
-There's a 'private void onItemsChanged(ListChangeListener.Change<? extends Lease> change)' in BulkRentTree.java and in that there's a sort() method call and that may cause this issue so comment out the first part and uncomment the second part, run, reduce the window height as before, do the same and see it still has some indentation issue.
-
-You may realise, at some point, you've to revamp your framework "to rule them all". When you do, don't forget to get rid of your worthless CSS, root cause of many problem for sure. The more I'm getting into it, the more I'm realizing that it's the "invincible" Java:FX, you can't fix it! 12 years have gone by and text wrapping issue in TreeCell is still tbd in your bug-tracker. You create and live with problem instead of solving a problem!
-
-27) Sometimes, you can't visualize this issue with the provided (data.db) database, you've to add more entries. The issue is in the popup of two top-right charts of HomeView. So in both chart's 'private class Tip' I've added some fake data to demonstrate. Launch the app, click on the rightmost pin of Charge & Collection view's chart. Popup will stay open, type e in the search box of popup, see the problem? Click the rightmost pincolumn of Due & Tenants view's chart, type e in the search box to see the same problem.
-
-Borderpane, content of Popup, doesn't know that the listview's been resized. Top and bottom of the Borderpane sticks together and the ListCells are rendered, in transparent background, beyond the bound of the unaware BorderPane! If you use fixed size ListView, you don't get into this issue. Problem is, you've to have resizable ListView in these popup. I'll comment out these fake data parts, in later release, if I keep torching down the rat-hole farther.
-
-In the ListChangeListener of ExtendedResizableListView, there was a calcHeight initialized as 0 and computed in wasAdded and wasRemoved. The problem was calcHeight remained 0 after the computation in wasAdded/wasRemoved. I've removed those wasAdded/wasRemoved altogether and added this:
-
-    private void resetHeight(){
-        double height = 0;
-        for(int i = 0; i < list.size(); i++){
-            height += vFlow.getCell(i).getHeight();
-        }
-        vBar.setOpacity(height < getMaxHeight() ? 0 : 1);
-        setPrefHeight(Math.min(getMaxHeight(), height));
-    }
-
-and in the layoutChildren method of ExtendedResizableListView:
-
-        if(!isLoaded){
-            isLoaded = true;
-            vBar = ((ExtendedResizableVirtualFlow <?>)vFlow).vBar;
-            list.addListener((ListChangeListener.Change<? extends T> change) -> resetHeight());
-            Platform.runLater(this::resetHeight);
-        }
-
-Platform.runLater(this::resetHeight) is for initial height computation. Without the Platform.runLater, you get wrong height.
-
-28) Your TreeView is useless when it comes to multiline wrapped Text in TextFlow inside GridPane column. I've tried setting prefWidth of the TextFlow, wrappingWidth in Text, prefHeight of TreeCell and finally compute/Min/Max/PrefHeight of TreeCell! None of these works and your TreeView displays some acrobatic show when you expand/collapse nodes. Sometimes you see extra space abouve and below cell, sometimes cells overlaps, sometimes cell jumps when you expand/select a node or scroll. To have a better view of the acrobatic show of your TreeView, play with the TreeVieew in HBView of 'JavaFX-CustomWindow-Button-Transition/FXTest-linux 19 December 2022' repo.[Hack see Controls/WrapTreeCellBase and subclasses]
-
-29) TreeCell'w width grows and right part is cutoff. On top right corner of Transactions -> Regular view, there're two section in two TreeView. Top one (Date, Deposit, Due) is LastSecurityDueTree and the bottom one (Date, Mode, Amount) is LastPaymentTree. If you keep scrolling up/down the bottom TreeView (PaymentTree), you'll see right part of some cells gets cutoff. Same thing happens you keep collapsing/expanding nodes. Code and cell factory for the treeview is in RentManager/trees/LastPaymentTree.java.
-
-To solve the growing width issue, you can wrap the Text of first Column in a TextFlow/FlowPane, which I've done, and set HGrow.Always in the ColumnConstraint and enjoy the acrobatic show of growing/shrinking height, if there's wrapped multiline Text.
-
-I don't know whether the hack will work in all cases. What a terrible TreeView you've made? It took +/-20 hours to figuare out what's going on! [Hack see Controls/WrapTreeCellBase and subclasses],
-
+18) You may realise, at some point, you've to revamp your framework "to rule them all". When you do, don't forget to get rid of your worthless CSS, root cause of many problem for sure. The more I'm getting into it, the more I'm realizing that it's the "invincible" Java:FX, you can't fix it! 12 years have gone by and text wrapping issue in TreeCell is still tbd in your bug-tracker. You create and live with problem instead of solving a problem!
 
 CREDITS
 ---------------------------
