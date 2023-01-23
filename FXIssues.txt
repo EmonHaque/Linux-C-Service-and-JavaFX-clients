@@ -176,6 +176,8 @@ You've TextField of Tenant SelectionBox and ListView of Control SelectionBox's p
 
 19) In linux Y position of TreeCell disclosure node looks ok. With the same setup in WrapTreeCellBase, Y position is wrong in Windows 10!
 
+20) In Linux, when you move mouse to the edges cursor changes and when you move it back to central part of window quickly, cursor doesn't change. Feels like many issues in Linux are actually GNOME/GTK/Xorg issue.
+
 CREDITS
 ---------------------------
 1) Your Bindings are great with your Simps (short for Simple...Property). In WPF you've to deal with a lot of string bindings and converters.
