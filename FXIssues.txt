@@ -180,6 +180,18 @@ You've TextField of Tenant SelectionBox and ListView of Control SelectionBox's p
 
 21) You animations consume lot more CPU and GPU power than WPF. In some case 10 times more.
 
+22) Listener of Text.textProperty() is called twice sometimes. Use the latest data.db to get into the issue. Go to Edit -> Transaction. Select 27/05/2021 in Date, You'll see 38 entries. Type mr c in Search box, out of the 12 entries last one is Sudan. Select that, click on edit button on bottom right corner, change Sudan to Kongo and click save button. You'll see:
+
+	HiTexts: onTextChanged old Sudan -  new Kongo - 
+	HiTexts: onTextChanged old Sudan -  new Kongo - 
+
+in console. onTextChanged method of Controls/controls/texts/HiTexts.java is called twice. Select the first entry, Afghanistan. Click edit and change Afghanistan to Iraq and click save. You'll see it prints once:
+
+	HiTexts: onTextChanged old Afghanistan -  new Iraq - 
+
+One call is expected. Found something interesting about bind while reading your documentation. It says "... Note that JavaFX has all the bind calls implemented through weak listeners. This means the bound property can be garbage collected and stopped from being updated." Does that mean JavaFX bind is just a joke or something else?
+
+
 CREDITS
 ---------------------------
 1) Your Bindings are great with your Simps (short for Simple...Property). In WPF you've to deal with a lot of string bindings and converters.
