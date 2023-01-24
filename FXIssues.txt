@@ -1,5 +1,5 @@
 Distro: Void Linux x64/glibc 
-Kernel: 6.1.6_1
+Kernel: 6.1.7_1
 DE: X11/GNOME 43.2
 Resolution: 3840 x 2160
 Scaling: 200%
