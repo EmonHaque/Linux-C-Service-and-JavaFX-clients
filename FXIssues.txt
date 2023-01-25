@@ -180,7 +180,7 @@ You've TextField of Tenant SelectionBox and ListView of Control SelectionBox's p
 
 21) Your animations consume lot more CPU and GPU power than WPF. In some case 10 times more.
 
-22) Listener of Text.textProperty() is called twice sometimes. Use the latest data.db to get into the issue. Go to Edit -> Transaction. Select 27/05/2021 in Date, You'll see 38 entries. Type mr c in Search box, out of the 12 entries last one is Sudan. Select that, click on edit button on bottom right corner, change Sudan to Kongo and click save button. You'll see:
+22) Listener of Text.textProperty() is called twice sometimes. Use the latest data.db to get into the issue. Go to Edit -> Transaction. Select 27/05/2021 in Date, You'll see 38 entries. Type mr c in Search box, out of the 12 entries last one is Sudan. Select that, click on edit button on bottom right corner, change Sudan to Kongo and click save button. You'll see [Removed the System.out.println so you won't see in console but it's called twice]:
 
 	HiTexts: onTextChanged old Sudan -  new Kongo - 
 	HiTexts: onTextChanged old Sudan -  new Kongo - 
