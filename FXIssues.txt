@@ -1,5 +1,5 @@
 Distro: Void Linux x64/glibc 
-Kernel: 6.1.7_1
+Kernel: 6.1.10_1
 DE: X11/GNOME 43.2
 Resolution: 3840 x 2160
 Scaling: 200%
@@ -7,7 +7,7 @@ Refresh rate: 29.97 Hz
 CPU: Intel Core i3 10100F x 8
 GPU: NVIDIA GeForce GT 730 (kepler)
 IDE: IntelliJ IDEA 2022.3.1 (Community Edition)
-openjdk 19.0.1 2022-10-18
+openjdk 19.0.2 2023-01-17
 JavaFX 19.0.2
 ===========================================================
 Instead of experimenting on nothing in 'JavaFX-CustomWindow-Button-Transition' repo decided to rewrite my WPF RentManager in JavaFX and see how it is. I think it's ok now except for NotificationView, which notifies only on plot add and plot edit by others (other instance of the Application will also work, userId has to be different), you can add more in AppData.java by looking at the WPF/C# version of Rentmanager. Major issue is JavaFX filtering System and because of that SelectionBox will cause some issue. I'll use it to see whether there's any other thing to solve. AND later I'll remove some of the points noted below that's already been fixed. Removed?Merged some points.
@@ -190,6 +190,8 @@ in console. onTextChanged method of Controls/controls/texts/HiTexts.java is call
 	HiTexts: onTextChanged old Afghanistan -  new Iraq - 
 
 One call is expected. Found something interesting about bind while reading your documentation. It says "... Note that JavaFX has all the bind calls implemented through weak listeners. This means the bound property can be garbage collected and stopped from being updated." Does that mean JavaFX bind is just a joke or something else?
+
+22) When you increase font size of a TextArea with ctrl + scroll, it scales up scrollbar!
 
 
 CREDITS
