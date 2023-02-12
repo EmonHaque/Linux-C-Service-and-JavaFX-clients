@@ -27,4 +27,5 @@ Bills / BillService
 1) database sql is in WPF Bills repo
 2) change char *database = "/mnt/HDD/bills.db" in void InitializeDatabase() function of Database.c;
 3) you need an image folder for images you save after paying Desco, WASA, Titas Gas and BTCL bills via Nagad mobile postal Service. Change static char *imageDirectory = "/mnt/HDD/images/" of Database.c;
-4) it's a dependency on tess4j.
+4) it's a dependency on tess4j (requires tesseract-ocr).
+5) Bills-JNA doesn't require tess4j (needs tesseract-ocr and opencv4)
