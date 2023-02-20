@@ -35,5 +35,5 @@ SQLite / SQLite-JNA
 
 1) It's not socket-based client/server like RentManager/Bills and you don't need Controls and Services modules.
 2) It needs jna and sqlite3. If you want to add more functionality on C side modify SQLite-JNA, compile and place the shared library in resources/lib folder of SQLIte.
-3) In the Database view, chose a sqlite database and double click on a table name to see Table on the right. Below the column header, there's a TextBox for filter. See private void onQuery method of SQLite/Controls/TableViewPage.java to look at the construction of WHERE clause from those text boxes.
+3) In the Database view, choose a sqlite database and double click on a table name to see Table on the right. Below the column header, there's a TextBox for filter. See private void onQuery method of SQLite/Controls/TableViewPage.java to look at the construction of WHERE clause from those text boxes.
 4) In SQL View, you can type query on left TextArea and execute to see output on the right. SQLite/Controls/QueryPage.java contains its code. No syntax highlighting. no code completion. There's some weird behavior in the TextArea, you may experience that when you do Ctrl + Mouse-Wheel
