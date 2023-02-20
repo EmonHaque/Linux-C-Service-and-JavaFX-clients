@@ -191,7 +191,11 @@ in console. onTextChanged method of Controls/controls/texts/HiTexts.java is call
 
 One call is expected. Found something interesting about bind while reading your documentation. It says "... Note that JavaFX has all the bind calls implemented through weak listeners. This means the bound property can be garbage collected and stopped from being updated." Does that mean JavaFX bind is just a joke or something else?
 
-22) When you increase font size of a TextArea with ctrl + scroll, it scales up scrollbar!
+22) When you increase font size of a TextArea with ctrl + scroll, it scales up scrollbar and some weird cursor behaviour! You see Cursor position doesn't change when font size increases
+
+23) In TableView you've row virtualization, nothing for columns. You can drag and resize TableColumn but you can't drag TableRow, can you?
+
+24) Qt has some good syntax highlighter, wxWidget, probably, has scintilla and WPF has RichTextBox, do you've a thing for syntax highlighting?
 
 
 CREDITS
