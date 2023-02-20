@@ -31,7 +31,7 @@ Bills / BillService
 5) Bills-JNA doesn't require tess4j (needs tesseract-ocr and opencv4)
 ---------------------------------------------------
 
-SQLite/SQLite-JNA
+SQLite / SQLite-JNA
 
 1) It's not socket-based client/server like RentManager/Bill and you don't need Controls and Services modules.
 2) It needs jna and sqlite3. If you want to add more functionality on C side modify SQLite-JNA, compile and place the shared library in redources/lib folder of SQLIte.
