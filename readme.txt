@@ -39,7 +39,3 @@ SQLite / SQLite-JNA
 3) In the Database view, choose a sqlite database and double click on a table name to see Table on the right. Below the column header, there's a TextBox for filter. See private void onQuery method of SQLite/Controls/TableViewPage.java to look at the construction of WHERE clause from those text boxes.
 
 4) In SQL View, you can type query on left TextArea and execute to see output on the right. SQLite/Controls/QueryPage.java contains its code. No syntax highlighting. suggestion and code completion works to some extent. There's some weird behavior in the TextArea, you may experience that when you do Ctrl + Mouse-Wheel
-
-5) all sqlite operations are done by calling 'sqlite3_exec(db, query, callback, 0, &error);' and what I've known is it's synchronous operation and it returns when it's done with the callback. On Java side there're three places where I call 'SQLiteWrapper.execute(query);' which in turns invoke 'sqlite3_exec(...)'. 1) ResultTask of TableViewPage.java, 2) ResultTask of QueryPage.java and 3) ConnectionTask of ObjectVM.jaava and before calling execute, I set jna callbacks. 
-
-So until C is done with callback it stays on sqlite3_exec and C callback keeps calling jna callback BUT, atleast twice, may be, out of thousand times, I've seen in console of IntelliJ 'JNA: callback object has been garbage collected'.
