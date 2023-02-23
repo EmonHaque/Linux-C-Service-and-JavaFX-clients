@@ -42,4 +42,4 @@ SQLite / SQLite-JNA
 
 5) all sqlite operations are done by calling 'sqlite3_exec(db, query, callback, 0, &error);' and what I've known is it's synchronous operation and it returns when it's done with the callback. On Java side there're three places where I call 'SQLiteWrapper.execute(query);' which in turns invoke 'sqlite3_exec(...)'. 1) ResultTask of TableViewPage.java, 2) ResultTask of QueryPage.java and 3) ConnectionTask of ObjectVM.jaava and before calling execute, I set jna callbacks. 
 
-So until C is done with callback it stays on sqlite3_exec and C callback keeps calling jna callback BUT, atleast twice, I've seen in console of IntelliJ 'JNA: callback object has been garbage collected'
+So until C is done with callback it stays on sqlite3_exec and C callback keeps calling jna callback BUT, atleast twice, may be, out of thousand times, I've seen in console of IntelliJ 'JNA: callback object has been garbage collected'.
