@@ -197,7 +197,7 @@ One call is expected. Found something interesting about bind while reading your 
 
 24) Qt has some good syntax highlighter, wxWidget, probably, has scintilla and WPF has RichTextBox, do you've a thing for syntax highlighting?
 
-25) Not sure whether it's JVM or JavaFX issue. Situation is you've low memory or you've set things like these-Xms256M -Xmx512M BUT your application, at some point, needs more memory than that. In such situation JVM/JavaFX doesn't throw OutOfMemoryException or give up. It keeps using 100% of all CPU cores, probably, to collect garbage / allocate new memory BUT it can't. If you don't quit / Window manager doesn't kill it, it certainly will melt CPU. Noticed this issue in my SQLite application when I'd lot of tabs opened and each of those tab had a table with 10 columns and the underlying model had ~130k+ rows.
+25) Not sure whether it's JVM or JavaFX issue. Situation is you've low memory or you've set things like these-Xms256M -Xmx512M BUT your application, at some point, needs more memory than that. In such situation JVM/JavaFX doesn't throw OutOfMemoryException or give up. It keeps using 100% of all CPU cores, probably, to collect garbage / allocate new memory BUT it can't. If you don't quit / Window manager doesn't kill it, it certainly will melt CPU. Noticed this issue in my SQLite application when I'd lot of tabs opened and each of those tab had a table with 10 columns and the underlying tableview model had ~130k rows.
 
 
 CREDITS
