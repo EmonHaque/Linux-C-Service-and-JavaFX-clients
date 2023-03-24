@@ -6,7 +6,7 @@ Scaling: 200%
 Refresh rate: 29.97 Hz
 CPU: Intel Core i3 10100F x 8
 GPU: NVIDIA GeForce GT 730 (kepler)
-IDE: IntelliJ IDEA 2022.3.1 (Community Edition)
+IDE: IntelliJ IDEA 2022.3.3 (Community Edition)
 openjdk 20 2023-03-21
 JavaFX 20
 ===========================================================
