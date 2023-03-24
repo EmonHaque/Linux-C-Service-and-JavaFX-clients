@@ -1,14 +1,14 @@
 Distro: Void Linux x64/glibc 
-Kernel: 6.1.12_1
-DE: X11/GNOME 43.2
+Kernel: 6.1.20_1
+DE: X11/GNOME 43.3
 Resolution: 3840 x 2160
 Scaling: 200%
 Refresh rate: 29.97 Hz
 CPU: Intel Core i3 10100F x 8
 GPU: NVIDIA GeForce GT 730 (kepler)
 IDE: IntelliJ IDEA 2022.3.1 (Community Edition)
-openjdk 19.0.2 2023-01-17
-JavaFX 19.0.2
+openjdk 20 2023-03-21
+JavaFX 20
 ===========================================================
 Instead of experimenting on nothing in 'JavaFX-CustomWindow-Button-Transition' repo decided to rewrite my WPF RentManager in JavaFX and see how it is. I think it's ok now except for NotificationView, which notifies only on plot add and plot edit by others (other instance of the Application will also work, userId has to be different), you can add more in AppData.java by looking at the WPF/C# version of Rentmanager. Major issue is JavaFX filtering System and because of that SelectionBox will cause some issue. I'll use it to see whether there's any other thing to solve. AND later I'll remove some of the points noted below that's already been fixed. Removed?Merged some points.
 ----------------------------------------------------------
@@ -202,6 +202,12 @@ One call is expected. Found something interesting about bind while reading your 
 26) ListView renders only the last item and you get this warning:javafx.scene.control.skin.VirtualFlow addTrailingCells INFO: index exceeds maxCellCount. Check size calculations for class CellTemplates.ListView.LedgerTemplate
 
 Scenario: you've a ListView and a Combobox. When selection changes in Combobox, Observable list backing ListView is cleared and repopulated. This happens when you get to the last item of ListView by scrolling, leave scrollbar there and make changes in combobox's selection. Observed this issue in the Ledgers (Plot/Space/Tenant) of ReportView of my RentManager
+
+27) ScrollTo doesn't scroll to the last item. In Regular View of RentManager's Transaction View, there's a TreeView at the bottom. When you add entries first branch is ControlHead, second Plot name and head+tenant is the leaf so you get three TreeItems when Control Head is changed. 
+
+Keep adding a bunch of Receivable entries until you reach the bottom of the view where the vertical scrollbar will appear if ou add one more entry. At that point change the Control Head and add one entry, you'll see two branches (Control Head and Plot name) and you've to scroll down manually to see the leaf. If you add one more entry, you'll see the bottom part of the leaf is cut off.
+
+In RentManager/trees/TransactionEntryTree.java, there's a method 'addItem' and the last line is 'scrollTo(getRow(newItem));'.
 
 
 CREDITS
