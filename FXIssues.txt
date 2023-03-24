@@ -72,7 +72,7 @@ in the constructor. o.isExpiredProperty() is a property of the items contained i
 
 These kind of filter with extractor in JavaFX invokes ListChangeListener.Change for every item removed and/or added and since my SelectionBox relies on these changes, it's highly inefficient. For these kind of Filter, I get a single Reset event in WPF and do whatever I want to do. In javaFX, the thing I do on change is done, many times, for every item added/removed when this type of filter is applied.
 
-On bottom right of HomeView, you see "Due & Payments" and there's a CheckBox (BiState) to filter exisiting or left tenants. When you click that, filter is applied and 'onTenantChanged' method of TenantDetailVM is called multiple times and as a result it jams the Server with multiple requests. When you apply fiter to a list, you don't call add/remove on the list, you just reset the list. If you go crazy, keep clicking nonstop, on the Existing checkbox (BiState) below, it hangs!
+On bottom right of HomeView, you see "Due & Payments" and there's a CheckBox (BiState) to filter exisiting or left tenants. When you click that, filter is applied and 'onTenantChanged' method of TenantDetailVM is called multiple times and as a result it jams the Server with multiple requests. When you apply fiter to a list, you don't call add/remove on the list, you just reset the list.
 
 4) in RentManager/ViewModels/Edit/EditLeaseVM you see these 3:
 
