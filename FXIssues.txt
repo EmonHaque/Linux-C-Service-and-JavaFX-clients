@@ -236,7 +236,7 @@ and to remove you've to do:
 	if(handler != null) removeEventHandler(Event, handler)
 	if(listener != null) removeListener(listener);
 	
-null check is a must when you're in ListCell/TreeCell and it's gets more painful when you've to maintain a List of these handlers.
+null check is a must when you're in ListCell/TreeCell and it's more painful when you've to maintain a List of these handlers.
 
 
 CREDITS
