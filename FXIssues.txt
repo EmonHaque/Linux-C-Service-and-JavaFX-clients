@@ -238,7 +238,7 @@ and to remove you've to do:
 	
 null check is a must when you're in ListCell/TreeCell and it's more painful when you've to maintain a List of these handlers.
 
-29) Bills-JNA has been working fine on linux. Now it fails, crashes the gnome-shell. You may not be able to test this because it needs some formatted images. In the HomeView, it's Load, Image, Extracted and Finalize subviews. In Load view you choose a directory containing formatted images and JNA with LibTessCV parses text from those images and list all those images in a treeview. When you select an item in the treeview of Load subview, rest 3 views are populated with image or text.
+29) Bills-JNA has been working fine on linux. Now it fails, crashes the gnome-shell, after some gnome, xorg and kernel updates. You may not be able to test this because it needs some formatted images. In the HomeView, it's Load, Image, Extracted and Finalize subviews. In Load view you choose a directory containing formatted images and JNA with LibTessCV parses text from those images and list all those images in a treeview. When you select an item in the treeview of Load subview, rest 3 views are populated with image or text.
 
 On the bottom of Finalize subview, there're two SumBox - billDetail and paymentDetail and in these SumBoxes there's a listview. In the CellFactory of those listviews there're two TextFields and one of those is - SuggestionBoxLess<T> keyField. In the SuggestionBoxLess there's a Popup to display suggestions in a listview.
 
