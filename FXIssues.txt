@@ -1,6 +1,6 @@
 Distro: Void Linux x64/glibc 
-Kernel: 6.1.20_1
-DE: X11/GNOME 43.3
+Kernel: 6.3.10_1
+DE: X11/GNOME 44.2
 Resolution: 3840 x 2160
 Scaling: 200%
 Refresh rate: 29.97 Hz
